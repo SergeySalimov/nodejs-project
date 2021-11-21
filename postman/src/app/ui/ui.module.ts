@@ -20,6 +20,7 @@ import { StoragePageTableComponent } from './storage-page/storage-page-table/sto
 import { AuthPageComponent } from './auth-page/auth-page.component';
 import { ForgotPasswordPageComponent } from './auth-page/forgot-password-page/forgot-password-page.component';
 import { DialogOnActionComponent } from './shared/dialog-on-action/dialog-on-action.component';
+import { AlertComponent } from './shared/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { DialogOnActionComponent } from './shared/dialog-on-action/dialog-on-act
     AuthPageComponent,
     ForgotPasswordPageComponent,
     DialogOnActionComponent,
+    AlertComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,7 @@ import { DialogOnActionComponent } from './shared/dialog-on-action/dialog-on-act
     HomePageComponent,
     NotFoundPageComponent,
     LoaderComponent,
+    AlertComponent,
   ],
 })
 export class UIModule {

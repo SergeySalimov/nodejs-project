@@ -1,0 +1,37 @@
+:host {
+  position: absolute;
+  bottom: var(--footer-height);
+  right: 5%;
+  left: 5%;
+  margin: auto;
+  z-index: 2;
+
+  .close {
+    position: absolute;
+    right: -9px;
+    top: -5px;
+
+    mat-icon {
+      transform: scale(0.7);
+    }
+  }
+
+  .mat-progress-bar {
+    transform: translate(0px, 6px);
+    height: 6px;
+    z-index: 3;
+    border-radius: 2px;
+  }
+
+  .mat-progress-bar.error-type {
+     border-top: 1px solid #f5c5cb;
+     border-left: 1px solid #f5c5cb;
+     border-right: 1px solid #f5c5cb;
+   }
+
+  .mat-progress-bar.info-type {
+    border-top: 1px solid #c3e6cb;
+    border-left: 1px solid #c3e6cb;
+    border-right: 1px solid #c3e6cb;
+  }
+}

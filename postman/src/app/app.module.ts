@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PostmanService } from './services/postman.service';
 import { UiStateService } from './services/ui-state.service';
 import { UserService } from './services/user.service';
+import { MessageService } from './services/message.service';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { UserService } from './services/user.service';
     PostmanService,
     UiStateService,
     UserService,
+    MessageService,
   ],
   bootstrap: [AppComponent]
 })

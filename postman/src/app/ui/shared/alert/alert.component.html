@@ -1,0 +1,19 @@
+<div *ngIf="isAlertInfoShown" @openCloseSmoothly>
+    <mat-progress-bar class="progress-bar-block info-type" mode="determinate" [value]="timerInfoValue"></mat-progress-bar>
+    <div class="alert alert-success alert-dismissible alert-block p-3" role="alert">
+        <strong>Информация! </strong> {{ infoMessage$ | async }}
+        <button type="button" class="close" mat-icon-button (click)="closeInfoWindow()">
+          <mat-icon>close</mat-icon>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="isAlertErrorShown" @openCloseSmoothly>
+  <mat-progress-bar class="progress-bar-block error-type" mode="determinate" color="warn" [value]="timerErrorValue"></mat-progress-bar>
+  <div class="alert alert-danger alert-dismissible alert-block p-3" role="alert">
+    <strong>Ошибка на сервере! </strong> {{ errorMessage$ | async }}
+    <button type="button" class="close" mat-icon-button (click)="closeErrorWindow()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
