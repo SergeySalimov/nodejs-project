@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { HistoryDto, RequestDto, ResponseDto, UploadFileDto } from '../interfaces/interfaces.dto';
 import { finalize, map } from 'rxjs/operators';
 import { saveAs as importedSaveAs } from 'file-saver';
+import { MessageService } from './message.service';
 
 @Injectable()
 export class PostmanService {
@@ -22,7 +23,7 @@ export class PostmanService {
 
   rootURL = '/api';
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient, private readonly messageService: MessageService) {
   }
 
   sendRequest(req: RequestDto): void {
@@ -63,13 +64,16 @@ export class PostmanService {
     this.http.get<void>(`${this.rootURL}/upload-file/${id}`, { responseType: 'blob' as any})
       .toPromise()
       .then(blob => importedSaveAs(blob, fileName))
-      .catch(err => console.log(err));
+      .catch(err => this.messageService.createNewToast('Ошибка при загрузке файла', false));
   }
 
   deleteDownloadedFile(id: string): Observable<void> {
     this.$isLoaded.next(true);
     return this.http.delete<void>(`${this.rootURL}/upload-file/${id}`).pipe(
-      finalize(() => this.$isLoaded.next(false)),
+      finalize(() => {
+        this.$isLoaded.next(false);
+        this.messageService.createNewToast('Файл был успешно удален с сервера', true);
+      }),
     );
   }
 
@@ -94,6 +98,7 @@ export class PostmanService {
     ).pipe(
       finalize(() => {
         this.$disableLoadButton.next(false);
+        this.messageService.createNewToast('Файл был успешно загружен на сервер', true);
       }),
     );
   }

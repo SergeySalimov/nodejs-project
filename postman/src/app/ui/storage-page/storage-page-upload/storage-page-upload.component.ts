@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostmanService } from '../../../services/postman.service';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { MessageService } from '../../../services/message.service';
 
 @Component({
   selector: 'app-storage-page-upload',
@@ -23,7 +22,6 @@ export class StoragePageUploadComponent implements OnInit, OnDestroy {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly postmanService: PostmanService,
-    private readonly messageService: MessageService,
     ) {}
 
   ngOnInit(): void {
@@ -74,15 +72,14 @@ export class StoragePageUploadComponent implements OnInit, OnDestroy {
             this.uploadForm.reset({ files: null, comments: ''});
             this.postmanService.getUploadFileList();
             this.uploadForm.enable();
-            this.messageService.createNewToast('Файл был успешно загружен на сервер', true);
           }),
           takeUntil(this.destroy$),
         ).subscribe();
       }
     };
-    connection.onerror = (event) => {
-      this.messageService.createNewToast('Ошибка при открытии web socket соеденения!', false);
-    };
+    // connection.onerror = (event) => {
+    //   console.log(event);
+    // };
   }
 
   prepareFiles(files: any): void {
