@@ -1,0 +1,39 @@
+<div class="col-sm-12 offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmitUpload()" (focusin)="resetUploadProgress()">
+    <div class="upload-zone material-block mb-2">
+      <div class="material-title">Upload-file</div>
+
+      <input
+        (change)="prepareFiles($event.target.files)"
+        formControlName="files"
+        type="file"
+        class="form-control-file"
+      >
+    </div>
+
+    <div class="comments">
+      <mat-form-field appearance="outline" class="comments-input">
+        <mat-label>Comments</mat-label>
+        <input formControlName="comments" matInput placeholder="Введите комментарий">
+      </mat-form-field>
+    </div>
+
+    <div class="progress mb-2">
+      <ng-container *ngIf="progress$ | async as uploadProgress">
+        <div
+          [style.width]="uploadProgress + '%'"
+          class="progress-bar {{getClassForProgressBar()}}"
+          role="progressbar"
+        >{{uploadProgress}} %</div>
+      </ng-container>
+    </div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="uploadForm.pristine || uploadForm.invalid || (disableUploadButton$ | async)">
+      Выслать файл
+    </button>
+  </form>
+</div>

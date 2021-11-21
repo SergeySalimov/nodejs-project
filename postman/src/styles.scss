@@ -1,0 +1,48 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.material-block {
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  padding: 10px;
+  position: relative;
+
+  .material-title {
+    position: absolute;
+    display: block;
+    transform: translateY(-1.59375em) scale(.75);
+    top: 0.84375em;
+    left: 0;
+    background-color: white;
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+}
+
+.break-word {
+  word-wrap: break-word;
+}
+
+$grid-breakpoints: (
+  xs: 0,
+  minsm: 460px,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
+:root {
+  --header-height: 62px;
+  --footer-height: 56px;
+  --main-height: calc(100vh - (62px + 56px));
+  --sidenav-width: 250px;
+
+  --main-base: #673ab7;
+  --main-white: white;
+  --main-gray: lightgray;
+  --main-red: #b00020;
+  --main-secondary: #03dac6;
+}

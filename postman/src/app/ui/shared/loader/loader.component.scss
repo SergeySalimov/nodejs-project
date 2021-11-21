@@ -1,0 +1,25 @@
+:host {
+  .hole-screen, .loader-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .hole-screen {
+    top: 0;
+    background-color: white;
+    opacity: 0.4;
+    z-index: 9;
+  }
+
+  .loader-container {
+    top: var(--header-height);
+    height: var(--main-height);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+}

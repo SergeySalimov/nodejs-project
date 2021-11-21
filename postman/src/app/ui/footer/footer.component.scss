@@ -1,0 +1,11 @@
+:host {
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--main-cyan);
+    color: var(--main-darkbase);
+    text-align: center;
+  }
+}

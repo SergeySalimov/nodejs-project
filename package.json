@@ -1,0 +1,33 @@
+{
+  "name": "hw4095",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=development node index.js &",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "prod": "npm install --only=prod && cross-env NODE_ENV=production node index.js &",
+    "start-prod": "cross-env NODE_ENV=production node index.js &",
+    "stop": "pkill --signal SIGINT nodejs-project"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/register": "^7.16.0",
+    "assert": "^2.0.0",
+    "connect-busboy": "0.0.2",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "express": "^4.17.1",
+    "ignore-styles": "^5.0.1",
+    "isomorphic-fetch": "^3.0.0",
+    "ws": "^8.2.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}

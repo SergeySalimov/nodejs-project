@@ -1,0 +1,67 @@
+:host {
+  .form-for-request {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    ::ng-deep .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .first-line, .header-block, .one-header-block {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+
+    .first-line {
+      flex-direction: row;
+      gap: 10px;
+
+      .type-of-request {
+        flex-basis: 10%;
+        max-width: 100px;
+      }
+
+      .url-of-request {
+        flex-basis: 90%;
+      }
+    }
+
+    .header-block {
+      flex-direction: column;
+      gap: 5px;
+
+      .one-header-block {
+        flex-direction: row;
+        gap: 5px;
+        width: 100%;
+
+        .header-input {
+          flex-basis: 50%;
+
+          ::ng-deep .mat-form-field-infix {
+            width: auto;
+          }
+        }
+
+        span {
+          font-size: 2rem;
+          font-weight: bold;
+        }
+
+        button.remove {
+          position: absolute;
+          right: -15px;
+          transform: scale(0.5);
+        }
+      }
+    }
+
+    .request-body {
+      ::ng-deep .mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<div class="response">
+  <div *ngIf="!response; else answer" class="material-block no-answer">
+    <div class="material-title">No answer yet</div>
+    <div class="h1">No answer</div>
+  </div>
+
+  <ng-template #answer>
+    <div class="material-block">
+      <div class="material-title">Url</div>
+      <span class="display-4 break-word" style="font-size: 1.2rem">{{response?.url}}</span>
+    </div>
+
+    <div class="material-block status">
+      <div class="material-title">Status</div>
+      <span class="bullet" [style.color]="color">&#8226;</span>
+      <span class="display-4 request-status" style="font-size: 1.2rem">
+        {{response?.status}}, {{response?.statusText}}
+      </span>
+    </div>
+
+    <div class="material-block">
+      <div class="material-title">Content-type</div>
+      <span class="display-4 break-word" style="font-size: 1.2rem">{{response?.contentType}}</span>
+    </div>
+
+    <div class="material-block">
+      <div class="material-title">Headers</div>
+      <div *ngFor="let header of response?.headers" class="display-4 break-word" style="font-size: 1rem">
+        <b>{{header.split(':')[0] | titlecase}}:</b>{{header.split(':')[1]}}
+      </div>
+    </div>
+
+    <div class="material-block">
+      <div class="material-title">Response text</div>
+      <span *ngFor="let line of responseText" class="display-4 break-word" style="font-size: 0.8rem">
+        {{line}}
+      </span>
+    </div>
+  </ng-template>
+</div>
+

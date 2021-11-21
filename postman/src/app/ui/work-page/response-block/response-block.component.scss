@@ -1,0 +1,30 @@
+:host {
+  .response {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    padding-top: 3.5px;
+    flex-grow: 1;
+
+    .no-answer {
+      display: flex;
+      height: 310px;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .status {
+      display: inline-flex;
+      gap: 5px;
+
+      .bullet {
+        font-size: 4rem;
+      }
+    }
+    //.request-status::before {
+    //  content: '\2022 ';
+    //  padding-right: 5px;
+    //}
+  }
+}

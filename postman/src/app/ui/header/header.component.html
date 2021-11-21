@@ -1,0 +1,63 @@
+<div *ngIf="sidenav.opened" class="area-to-close-sidenav" (click)="sidenav.toggle(false)"></div>
+<mat-sidenav-container class="mat-sidenav-container">
+  <mat-sidenav
+      #sidenav
+      role="navigation"
+      class="mat-sidenav"
+      fixedInViewport="true"
+      fixedTopGap="62"
+      fixedBottomGap="56"
+  >
+    <mat-nav-list>
+      <a
+        (click)="sidenav.toggle(false)"
+        type="button"
+        mat-list-item
+        [routerLink]="['/', route.WORK]"
+        routerLinkActive="active"
+      >
+        <mat-icon class="icon">compare_arrows</mat-icon>
+        <span class="label">Работа</span>
+      </a>
+      <a
+        (click)="sidenav.toggle(false)"
+        type="button"
+        mat-list-item
+        [routerLink]="['/' + route.STORAGE]"
+        routerLinkActive="active"
+      >
+        <mat-icon class="icon">storage</mat-icon>
+        <span class="label">Хранилище</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="mat-content">
+    <mat-toolbar color="primary">
+      <div fxHide.gt-xs>
+        <button mat-button (click)="sidenav.toggle()">
+          <mat-icon>view_headline</mat-icon>
+        </button>
+      </div>
+      <div>
+        <a [routerLink]="['/', route.HOME]" class="ml-2">Главная</a>
+      </div>
+      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxFlexAlign="center" fxHide.xs>
+        <ul fxLayout class="navigation-items">
+          <li fxLayoutAlign="flex-end">
+            <a [routerLink]="['/', route.STORAGE]" routerLinkActive="active">
+              <mat-icon class="icon">storage</mat-icon>
+              <span class="label">Хранилище</span>
+            </a>
+          </li>
+          <li fxLayoutAlign="flex-end">
+            <a [routerLink]="['/', route.WORK]" routerLinkActive="active">
+              <mat-icon class="icon">compare_arrows</mat-icon>
+              <span class="label">Работа</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </mat-toolbar>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

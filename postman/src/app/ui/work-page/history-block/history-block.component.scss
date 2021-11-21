@@ -1,0 +1,38 @@
+:host {
+  .active-history {
+    outline: 2px solid var(--main-base);
+  }
+
+  .first-line {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .close {
+    position: absolute;
+    top: -11px;
+    right: -11px;
+    padding: 0;
+
+    &:hover .standardShow, &:not(:hover) .onHoverShow {
+      display: none;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+      color: var(--main-red);
+      transition: transform 0.5s, display 0.5s linear;
+    }
+
+    &:active {
+      color: var(--main-secondary);
+    }
+  }
+  .history-block {
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row">
+    <h2 class="text-center mt-4 mb-2 h1">Сделайте запрос</h2>
+
+    <div class="button-line mb-3">
+      <mat-slide-toggle [checked]="showHistory" (change)="showHistory = !showHistory">История</mat-slide-toggle>
+
+      <button mat-raised-button color="accent" [routerLink]="['/', ROUTES.WORK]">Новый запрос</button>
+
+      <button mat-raised-button color="primary"
+              (click)="sendRequest(requestBlockComponent.requestForm.getRawValue())"
+              [disabled]="disableSendRequest$ | async">
+        Выслать запрос
+      </button>
+    </div>
+
+    <div *ngIf="showHistory" class="col-md-2">
+      <h3 class="text-center saved-request h2">История</h3>
+
+      <app-work-history-block
+        [histories]="postmanService.history$ | async"
+        [activeHistoryId]="activeHistoryId$ | async"
+        (deleteHistoryEmit)="onDeleteHistory($event)"
+        (changeHistoryEmit)="navigateOnHistory($event)"
+      ></app-work-history-block>
+    </div>
+
+    <div [ngClass]="showHistory ? 'col-md-6' : 'col-md-8'">
+      <h3 class="text-center requests h2">Запрос</h3>
+
+      <app-work-request-block
+        #requestBlockComponent
+        [pathFormValue]="requestFormPatch$ | async"
+        (requestFormStatus)="onRequestFormStatusChange($event)"
+      ></app-work-request-block>
+    </div>
+
+    <div class="col-md-4">
+      <h3 class="text-center responses h2">Ответ</h3>
+
+      <app-work-response-block [response]="postmanService.response$ | async"></app-work-response-block>
+    </div>
+  </div>
+</div>

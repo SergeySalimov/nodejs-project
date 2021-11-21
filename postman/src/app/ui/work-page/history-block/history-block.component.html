@@ -1,0 +1,22 @@
+<div *ngFor="let history of histories"
+     [class.alert-primary]="history.type === TYPE.GET"
+     [class.alert-warning]="history.type === TYPE.POST"
+     [class.active-history]="history.id === activeHistoryId"
+     class="alert alert-dismissible alert-block p-2 m-1 history-block"
+     role="alert"
+     (click)="changeHistoryEmit.emit(history.id)"
+>
+  <div class="first-line">
+    <span><strong>{{history.type}}</strong></span>
+    <span class="display-4 break-word" style="font-size: 0.7rem">
+      {{history.created | date: 'dd/MM/yyyy HH:mm:ss'}}
+    </span>
+  </div>
+  <div class="display-4 break-word" style="font-size: 0.8rem">
+    {{history.url}}
+  </div>
+  <button type="button" class="close" mat-icon-button>
+    <mat-icon class="small onHoverShow" (click)="deleteHistoryEmit.emit(history.id)">delete</mat-icon>
+    <mat-icon class="small standardShow" (click)="deleteHistoryEmit.emit(history.id)">close</mat-icon>
+  </button>
+</div>

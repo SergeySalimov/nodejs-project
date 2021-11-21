@@ -1,0 +1,54 @@
+<form [formGroup]="requestForm" class="form-for-request" (input)="getIsInvalidOnChangeInForm()">
+  <div class="first-line">
+    <mat-form-field appearance="outline" class="type-of-request">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option [value]="type.GET">{{type.GET}}</mat-option>
+        <mat-option [value]="type.POST">{{type.POST}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="url-of-request">
+      <mat-label>url</mat-label>
+      <input formControlName="url" matInput placeholder="Введите url">
+    </mat-form-field>
+  </div>
+
+  <div formArrayName="headers" class="header-block material-block">
+    <div class="material-title">Headers</div>
+
+    <ng-container *ngFor="let header of formHeaders.controls; let i = index">
+      <div [formGroupName]="i" class="one-header-block">
+        <mat-form-field appearance="outline" class="header-input">
+          <mat-label>{{i + 1}}. Request header key</mat-label>
+          <input formControlName="key" matInput placeholder="Введите header key">
+        </mat-form-field>
+        <span>:</span>
+        <mat-form-field appearance="outline" class="header-input">
+          <mat-label>{{i + 1}}. Request header value</mat-label>
+          <input formControlName="value" matInput placeholder="Введите header value">
+        </mat-form-field>
+
+        <button (click)="removeHeader(i)" mat-mini-fab color="warn" class="remove">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </div>
+    </ng-container>
+
+    <button (click)="addHeader()" mat-mini-fab class="add">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <div class="request-body">
+    <mat-form-field appearance="outline">
+      <mat-label>Body</mat-label>
+      <textarea formControlName="body"
+                cdkTextareaAutosize
+                cdkAutosizeMinRows="5"
+                cdkAutosizeMaxRows="15"
+                matInput></textarea>
+    </mat-form-field>
+  </div>
+</form>
+
