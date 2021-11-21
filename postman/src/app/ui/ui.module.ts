@@ -17,6 +17,9 @@ import { StoragePageComponent } from './storage-page/storage-page.component';
 import { PipesModule } from '../pipes/pipes.module';
 import { StoragePageUploadComponent } from './storage-page/storage-page-upload/storage-page-upload.component';
 import { StoragePageTableComponent } from './storage-page/storage-page-table/storage-page-table.component';
+import { AuthPageComponent } from './auth-page/auth-page.component';
+import { ForgotPasswordPageComponent } from './auth-page/forgot-password-page/forgot-password-page.component';
+import { DialogOnActionComponent } from './shared/dialog-on-action/dialog-on-action.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { StoragePageTableComponent } from './storage-page/storage-page-table/sto
     StoragePageComponent,
     StoragePageUploadComponent,
     StoragePageTableComponent,
+    AuthPageComponent,
+    ForgotPasswordPageComponent,
+    DialogOnActionComponent,
   ],
   imports: [
     CommonModule,

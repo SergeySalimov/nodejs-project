@@ -1,0 +1,11 @@
+:host {
+  .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .eye-psw {
+    cursor: pointer;
+  }
+}

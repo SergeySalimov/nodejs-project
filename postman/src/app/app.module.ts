@@ -8,6 +8,7 @@ import { UIModule } from './ui/ui.module';
 import { HttpClientModule } from '@angular/common/http';
 import { PostmanService } from './services/postman.service';
 import { UiStateService } from './services/ui-state.service';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,11 @@ import { UiStateService } from './services/ui-state.service';
     AppRoutingModule,
     UIModule,
   ],
-  providers: [PostmanService, UiStateService],
+  providers: [
+    PostmanService,
+    UiStateService,
+    UserService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

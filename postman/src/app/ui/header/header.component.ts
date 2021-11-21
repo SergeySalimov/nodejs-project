@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouteEnum } from '../../app-routing.constant';
+import { AuthEnum, RouteEnum } from '../../app-routing.constant';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -8,4 +9,6 @@ import { RouteEnum } from '../../app-routing.constant';
 })
 export class HeaderComponent {
   route = RouteEnum;
+  auth = AuthEnum;
+  constructor(public readonly userService: UserService) {}
 }

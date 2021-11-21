@@ -1,0 +1,7 @@
+<h1 mat-dialog-title class="text-center">Предупреждение</h1>
+<div mat-dialog-content>{{ data.text }}</div>
+<div mat-dialog-actions align="end" class="w-100 mt-1">
+    <button mat-button (click)="dialogRef.close(result.NO)">Нет, спасибо</button>
+    <button mat-button cdkFocusInitial (click)="dialogRef.close(result.YES)">Да</button>
+</div>
+

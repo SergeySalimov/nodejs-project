@@ -1,0 +1,83 @@
+<div class="row justify-content-center">
+  <div class="col-sm-8 col-md-6 mt-2 mt-md-5 mb-4">
+    <h1 class="text-center">{{ logStatus === eLog.SIGN_UP ? 'Регистрация' : 'Войти'}}</h1>
+    <hr class="my-1 my-md-3">
+
+    <form (submit)="onSubmit()" ngNativeValidate autocomplete="off">
+      <div class="form-group" *ngIf="logStatus === eLog.SIGN_UP">
+        <label for="surname">Фамилия</label>
+        <input [(ngModel)]="user.surname"
+               name="surname"
+               type="text"
+               required
+               class="form-control"
+               id="surname"
+               placeholder="Фамилия">
+      </div>
+
+      <div class="form-group" *ngIf="logStatus === eLog.SIGN_UP">
+        <label for="name">Имя</label>
+        <input [(ngModel)]="user.name"
+               name="name"
+               type="text"
+               required
+               class="form-control"
+               id="name"
+               placeholder="Имя">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Почта</label>
+        <input
+          [(ngModel)]="user.email"
+          name="email"
+          type="email"
+          required
+          class="form-control"
+          id="email"
+          placeholder="введите почту">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Пароль</label>
+        <div class="input-group">
+          <input
+            [(ngModel)]="user.password"
+            #pswd="ngModel"
+            name="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            class="form-control"
+            [class.is-invalid]="pswd.invalid && pswd.touched"
+            minlength="6"
+            required
+            id="password"
+            placeholder="введите пароль">
+          <div class="input-group-text bg-transparent">
+            <mat-icon class="eye-psw" (click)="hidePassword = !hidePassword" [color]="hidePassword ? 'primary' : 'warn'">
+              {{hidePassword ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+          </div>
+          <div class="invalid-feedback">Минимум {{pswd.model?.toLocaleString().length || '0'}}/6 символов</div>
+        </div>
+      </div>
+      <span *ngIf="logStatus === eLog.LOG_IN" class="pl-2">
+                <a [routerLink]="[securityRoute, eLog.FORGOT_PSWD]"
+                   [queryParams]="{ email: user.email }"
+                   [style.color]="'black'"
+                ><strong>Забыли пароль?</strong>
+                </a>
+            </span>
+
+      <div class="auth-buttons mx-0 mt-3">
+        <button type="submit" mat-raised-button color="primary">Отправить</button>
+        <button [routerLink]="['']" mat-stroked-button color="warn">Отмена</button>
+      </div>
+    </form>
+    <p class="mt-2 mb-5 text-center">
+      <span>{{logStatus === eLog.SIGN_UP ? 'Уже зарегистрированы?&nbsp;' : 'У вас нет учетной записи?&nbsp;'}}</span>
+      <a [routerLink]="[securityRoute, logStatus === eLog.SIGN_UP ? eLog.LOG_IN : eLog.SIGN_UP]">
+        {{logStatus === eLog.SIGN_UP ? 'Войти!' : 'Зарегистрироваться!'}}
+      </a>
+    </p>
+  </div>
+</div>
