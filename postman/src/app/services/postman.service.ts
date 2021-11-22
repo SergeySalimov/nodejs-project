@@ -5,6 +5,7 @@ import { HistoryDto, RequestDto, ResponseDto, UploadFileDto } from '../interface
 import { finalize, map } from 'rxjs/operators';
 import { saveAs as importedSaveAs } from 'file-saver';
 import { MessageService } from './message.service';
+import { ROOT_URL } from '../interfaces/constant';
 
 @Injectable()
 export class PostmanService {
@@ -21,14 +22,11 @@ export class PostmanService {
   $uploadFileList: BehaviorSubject<UploadFileDto[]> = new BehaviorSubject<UploadFileDto[]>([]);
   uploadFileList$: Observable<UploadFileDto[]> = this.$uploadFileList.asObservable();
 
-  rootURL = '/api';
-
-  constructor(private readonly http: HttpClient, private readonly messageService: MessageService) {
-  }
+  constructor(private readonly http: HttpClient, private readonly messageService: MessageService) {}
 
   sendRequest(req: RequestDto): void {
     this.$isLoaded.next(true);
-    this.http.post<ResponseDto>(`${this.rootURL}/requests`, req).pipe(
+    this.http.post<ResponseDto>(`${ROOT_URL}/requests`, req).pipe(
       finalize(() => {
         this.$isLoaded.next(false);
         this.getHistory();
@@ -38,21 +36,21 @@ export class PostmanService {
 
   getHistory(): void {
     this.$isLoaded.next(true);
-    this.http.get<HistoryDto>(`${this.rootURL}/histories`).pipe(
+    this.http.get<HistoryDto>(`${ROOT_URL}/histories`).pipe(
       finalize(() => this.$isLoaded.next(false)),
     ).subscribe((data: HistoryDto) => this.$history.next(data?.reverse() || []));
   }
 
   deleteHistory(id: string): Observable<void> {
     this.$isLoaded.next(true);
-    return this.http.delete<void>(`${this.rootURL}/histories/${id}`).pipe(
+    return this.http.delete<void>(`${ROOT_URL}/histories/${id}`).pipe(
       finalize(() => this.$isLoaded.next(false)),
     );
   }
 
   getUploadFileList(): void {
     this.$isLoaded.next(true);
-    this.http.get<UploadFileDto[]>(`${this.rootURL}/list-of-upload-files`).pipe(
+    this.http.get<UploadFileDto[]>(`${ROOT_URL}/list-of-upload-files`).pipe(
       finalize(() => this.$isLoaded.next(false)),
       map((data: UploadFileDto[]) => data?.map((el, i) => ({ ...el, position: i + 1 })) || []),
     ).subscribe(data => {
@@ -61,7 +59,7 @@ export class PostmanService {
   }
 
   downloadFile(id: string, fileName: string): void {
-    this.http.get<void>(`${this.rootURL}/upload-file/${id}`, { responseType: 'blob' as any})
+    this.http.get<void>(`${ROOT_URL}/upload-file/${id}`, { responseType: 'blob' as any})
       .toPromise()
       .then(blob => importedSaveAs(blob, fileName))
       .catch(err => this.messageService.createNewToast('Ошибка при загрузке файла', false));
@@ -69,7 +67,7 @@ export class PostmanService {
 
   deleteDownloadedFile(id: string): Observable<void> {
     this.$isLoaded.next(true);
-    return this.http.delete<void>(`${this.rootURL}/upload-file/${id}`).pipe(
+    return this.http.delete<void>(`${ROOT_URL}/upload-file/${id}`).pipe(
       finalize(() => {
         this.$isLoaded.next(false);
         this.messageService.createNewToast('Файл был успешно удален с сервера', true);
@@ -87,7 +85,7 @@ export class PostmanService {
     formData.append('comment', comment);
 
     return this.http.post<UploadFileDto>(
-      `${this.rootURL}/upload-file`,
+      `${ROOT_URL}/upload-file`,
       formData,
       {
         headers: {

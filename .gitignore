@@ -10,3 +10,4 @@ nginx_caches/
 **/dist
 /data/
 /uploaded/
+/credentials/

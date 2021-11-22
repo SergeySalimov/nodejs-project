@@ -1,4 +1,4 @@
-<ng-container *ngIf="postmanService.isLoaded$ | async">
+<ng-container *ngIf="(postmanService.isLoaded$ | async) || (userService.isLoaded$ | async)">
   <div class="loader-container">
     <mat-spinner [diameter]="250"></mat-spinner>
   </div>

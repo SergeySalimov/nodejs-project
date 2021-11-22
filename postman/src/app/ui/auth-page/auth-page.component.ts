@@ -24,8 +24,8 @@ export class AuthPageComponent implements OnDestroy {
   
   public onSubmit(): void {
     this.logStatus === this.eLog.SIGN_UP ?
-      this.userService.signUpWithEmail() :
-      this.userService.loginWithEmail();
+      this.userService.signUpWithEmail(this.user) :
+      this.userService.loginWithEmail(this.user);
   }
   
   ngOnDestroy(): void {

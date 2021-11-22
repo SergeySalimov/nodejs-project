@@ -1,3 +1,6 @@
+// ToDo create interceptor for adding this to each request
+export const ROOT_URL = '/api';
+
 export enum RequestTypeEnum {
   GET = 'GET',
   POST = 'POST',

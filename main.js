@@ -4,15 +4,25 @@ import fetch from 'isomorphic-fetch';
 import fs from 'fs';
 import cors from 'cors';
 import busboy from 'connect-busboy';
+import WebSocket from 'ws';
+// import bcrypt from 'bcryptjs';
 import {
   addTimeFromNow,
   checkIdValidity,
   createSecureUploadData,
   getNewId,
+  getRandomString,
   logLineAsync,
   shortMessage,
 } from './share/helper-es6';
-import WebSocket from 'ws';
+import Users from './db/users';
+import {
+  createConfirmationPage,
+  MESSAGE_ERROR_FOR_USER,
+  MESSAGE_ERROR_SENT_EMAIL_FOR_USER,
+  MESSAGE_SUCCESS_FOR_USER,
+  sendEmail
+} from './share/send-email';
 
 const webServer = express();
 const PORT = 7780;
@@ -27,9 +37,16 @@ const logPath = path.join(__dirname, '_server.log');
 const historyPath = path.join(__dirname, 'data/history.json');
 const uploadDataPath = path.join(__dirname, 'data/upload-data.json');
 const uploadDirPath = path.join(__dirname, 'uploaded');
+let serverUrl;
+// Set configurations for development or production
+if (process.env.NODE_ENV === 'production') {
+  serverUrl = `http://178.172.195.18:${PORT}`;
+} else {
+  serverUrl = `http://localhost:${PORT}`;
+}
 
 const webSocketServer = new WebSocket.Server({ port: WS_PORT });
-logLineAsync(`Websocket server has been created on port ${WS_PORT}`);
+logLineAsync(`Websocket server has been created on port ${WS_PORT}`, logPath);
 let webSocketClients = [];
 
 webServer.use(express.urlencoded({ extended: true }));
@@ -114,8 +131,6 @@ webServer.delete(`${API}/histories/:id`, (req, res) => {
   
   res.status(204).end();
 });
-
-webServer.options(`${API}/requests`);
 
 webServer.post(`${API}/requests`, async (req, res) => {
   const { type, url, body, headers } = req.body;
@@ -273,7 +288,7 @@ webServer.delete(`${API}/upload-file/:id`, (req, res) => {
   if (uploadFileIndex >= 0) {
     const removedUploadFile = uploadData.splice(uploadFileIndex, 1)[0];
     const { newFilePath: removedFilePath, originalName } = removedUploadFile[id];
-  
+    
     if (fs.existsSync(removedFilePath)) {
       try {
         fs.unlink(removedFilePath, err => {
@@ -300,8 +315,6 @@ webServer.delete(`${API}/upload-file/:id`, (req, res) => {
     res.status(404).end();
   }
 });
-
-webServer.options(`${API}/upload-file`);
 
 webServer.post(`${API}/upload-file`, busboy(), async (req, res) => {
   let uploadData;
@@ -348,7 +361,7 @@ webServer.post(`${API}/upload-file`, busboy(), async (req, res) => {
     
     const writeStream = fs.createWriteStream(newFilePath);
     file.pipe(writeStream);
-  
+    
     file.on('data', data => {
       totalDownloaded += data.length;
       if (webSocketClient) {
@@ -390,6 +403,65 @@ webServer.post(`${API}/upload-file`, busboy(), async (req, res) => {
   });
 });
 
+webServer.post(`${API}/sign-in`, async (req, res) => {
+  const { email, password } = req.body?.user;
+  if (!(email && password)) {
+    logLineAsync(`[${PORT}] ERROR request for sign-up, missing data`, logPath);
+    return res.status(400).end();
+  }
+  
+  // bcrypt.compare(pass, hash, function(error, isMatch) {
+  //   if (error) {
+  //     console.log(error);
+  //   } else if (!isMatch) {
+  //     console.log("Password doesn't match!")
+  //   } else {
+  //     console.log("Password matches!")
+  //   }
+  // });
+});
+
+webServer.post(`${API}/sign-up`, async (req, res) => {
+  const { email, password, surname, name } = req.body?.user;
+  res.setHeader('Content-Type', 'application/json');
+  
+  if (!(email && password && surname && name)) {
+    logLineAsync(`[${PORT}] ERROR request for new user, missing data`, logPath);
+    return res.status(400).send('MESSAGE_ERROR_FOR_USER').end();
+  }
+  
+  const sid = getRandomString(50);
+  
+  try {
+    await Users.createANewUser({ email, password, surname, name, sid });
+    logLineAsync(`[${PORT}] new user "${email}" was saved in database`, logPath);
+  } catch (e) {
+    logLineAsync(`[${PORT}] ERROR saving user "${email}" in database`, logPath);
+    return res.status(400).send('MESSAGE_ERROR_FOR_USER').end();
+  }
+
+  let link = `${serverUrl}/confirmation-email?sid=${sid}`;
+
+  sendEmail(email, { name, surname, link })
+    .then( () => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
+    .catch( err => {
+      logLineAsync(`[${PORT}] ERROR sending email for "${email}", text: ${shortMessage(err)}`, logPath);
+      return res.status(400).send('MESSAGE_ERROR_SENT_EMAIL_FOR_USER').end();
+    });
+  
+  MESSAGE_SUCCESS_FOR_USER.sid = sid;
+  res.status(200).send(MESSAGE_SUCCESS_FOR_USER).end();
+});
+
+webServer.get('/confirmation-email', (req, res) => {
+  console.log(req.query);
+  
+  res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+  res.setHeader('Cache-Control','public, max-age=60');
+  
+  res.status(200).send(createConfirmationPage(serverUrl)).end();
+});
+
 webServer.get('*', (req, res) => {
   res.sendFile(process.cwd() + pathToAppDist + 'index.html');
 });
@@ -399,7 +471,7 @@ webServer.listen(PORT, () => {
 });
 
 webSocketServer.on('connection', connection => {
-  logLineAsync(`[${WS_PORT}] new websocket connection established`);
+  logLineAsync(`[${WS_PORT}] new websocket connection established`, logPath);
   let newClient;
   
   connection.on('message', data => {

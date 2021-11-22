@@ -30,4 +30,10 @@ export interface UploadFileDto {
   position?: number;
 }
 
+export interface MessageDto {
+  message: string,
+  error: boolean,
+  sid?: string,
+}
+
 export type HistoryDto = Array<History>;

@@ -17,21 +17,23 @@ function logLineSync(logMessage, logFilePath = logPath) {
 }
 
 function logLineAsync(logMessage, logFilePath = logPath) {
-  return new Promise((resolve ,reject) => {
+  return new Promise((resolve, reject) => {
     const logDT = new Date();
     const fullLog = `${logDT.toLocaleDateString()} ${logDT.toLocaleTimeString()} ${logMessage}`;
     
     console.log(fullLog);
     
     fs.open(logFilePath, 'a+', (err, logFd) => {
-      if(err) {
+      if (err) {
         reject(err);
       } else {
         fs.write(logFd, fullLog + os.EOL, (err) => {
           if (err) {
             reject(err);
           } else {
-            fs.close(logFd, err => { err ? reject(err) : resolve(); });
+            fs.close(logFd, err => {
+              err ? reject(err) : resolve();
+            });
           }
         });
       }
@@ -57,10 +59,22 @@ function shuffleArray(array) {
 
 function getNewId() {
   // return 16 digit string ID
-  const randomString = (Date.now().toString(36)  + Math.random().toString(36).substring(2, 15));
+  const randomString = (Date.now().toString(36) + Math.random().toString(36).substring(2, 15));
   const shuffledString = shuffleArray(randomString.split('')).join('');
   
   return shuffledString.substring(0, 16);
+}
+
+function getRandomString(length = 50) {
+  let count = Math.floor(length / 16);
+  let str = '';
+  do {
+    str += (Date.now().toString(36) + Math.random().toString(36).substring(2, 15));
+    count--;
+  } while (count >= 0);
+  const shuffledString = shuffleArray(str.split('')).join('');
+  
+  return shuffledString.substring(0, length);
 }
 
 function checkIdValidity(id, logPath, PORT) {
@@ -96,6 +110,26 @@ function createSecureUploadData(obj) {
   };
 }
 
+let dividerRES="[ \n\r]";
+let tagNameRES="[a-zA-Z0-9]+";
+let attrNameRES="[a-zA-Z]+";
+let attrValueRES="(?:\".+?\"|'.+?'|[^ >]+)";
+let attrRES="("+attrNameRES+")(?:"+dividerRES+"*="+dividerRES+"*("+attrValueRES+"))?";
+let openingTagRES="<("+tagNameRES+")((?:"+dividerRES+"+"+attrRES+")*)"+dividerRES+"*/?>"; // включает и самозакрытый вариант
+let closingTagRES="</("+tagNameRES+")"+dividerRES+"*>";
+
+let openingTagRE=new RegExp(openingTagRES,"g");
+let closingTagRE=new RegExp(closingTagRES,"g");
+
+// удаляет из строки все теги
+function removeTags(str,replaceStr="") {
+  if ( typeof(str)=="string" && str.indexOf("<")!=-1 ) {
+    str=str.replace(openingTagRE,replaceStr);
+    str=str.replace(closingTagRE,replaceStr);
+  }
+  return str;
+}
+
 export {
   logLineSync,
   logLineAsync,
@@ -105,4 +139,6 @@ export {
   addTimeFromNow,
   shortMessage,
   createSecureUploadData,
+  getRandomString,
+  removeTags,
 };
