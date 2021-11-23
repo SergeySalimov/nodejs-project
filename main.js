@@ -5,7 +5,6 @@ import fs from 'fs';
 import cors from 'cors';
 import busboy from 'connect-busboy';
 import WebSocket from 'ws';
-// import bcrypt from 'bcryptjs';
 import {
   addTimeFromNow,
   checkIdValidity,
@@ -18,11 +17,12 @@ import {
 import Users from './db/users';
 import {
   createConfirmationPage,
-  MESSAGE_ERROR_FOR_USER,
   MESSAGE_ERROR_SENT_EMAIL_FOR_USER,
   MESSAGE_SUCCESS_FOR_USER,
   sendEmail,
 } from './share/send-email';
+import MESSAGE from "./share/messages";
+import Session from "./db/session";
 
 const webServer = express();
 const PORT = 7780;
@@ -410,15 +410,51 @@ webServer.post(`${API}/sign-in`, async (req, res) => {
     return res.status(400).end();
   }
   
-  // bcrypt.compare(pass, hash, function(error, isMatch) {
-  //   if (error) {
-  //     console.log(error);
-  //   } else if (!isMatch) {
-  //     console.log("Password doesn't match!")
-  //   } else {
-  //     console.log("Password matches!")
-  //   }
-  // });
+  try {
+   await Users.checkUserAndPassword(email, password)
+     .then(result => {
+       if(result.error) {
+         logLineAsync(`[${PORT}] ERROR on check user password "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
+         return res.status(401).send({ message: MESSAGE.ERROR_BAD_DATA }).end();
+       }
+       
+       if (!result.isUserExists) {
+         logLineAsync(`[${PORT}] ERROR sign-in for user "${email}"`, logPath);
+         return res.status(401).send({ message: MESSAGE.ERROR_USER_DO_NOT_EXISTS }).end();
+       }
+       
+       if (!result.isMatch) {
+         logLineAsync(`[${PORT}] ERROR sign-in for user "${email}"`, logPath);
+         return res.status(401).send({ message: MESSAGE.ERROR_PASSWORD_INCORRECT }).end();
+       }
+       
+       if (!result.isSIDConfirmed) {
+         logLineAsync(`[${PORT}] sign-in for user "${email} without confirmation"`, logPath);
+         return res.status(401).send({ message: MESSAGE.ERROR_NO_CONFIRMATION }).end();
+       }
+     });
+  
+   await Session.createUpdateSession(email).then(result => {
+     if(result.error) {
+       logLineAsync(`[${PORT}] ERROR on save session "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
+       return res.status(401).send({ message: MESSAGE.ERROR_BAD_DATA }).end();
+     }
+     
+     if(!result.xToken) {
+       logLineAsync(`[${PORT}] ERROR on save session "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
+       return res.status(401).send({ message: MESSAGE.ERROR_UNAUTHORIZED }).end();
+     } else {
+  
+       logLineAsync(`[${PORT}] user authorized and sent xToken for "${email}"`, logPath);
+       res.setHeader('X-Token', result.xToken);
+       res.status(200).send({message: MESSAGE.SUCCESS_LOGIN}).end();
+     }
+   });
+   
+  } catch (e) {
+    logLineAsync(`[${PORT}] ERROR on database work on check password for email "${email}".}`, logPath);
+    return res.status(400).end();
+  }
 });
 
 webServer.post(`${API}/sign-up`, async (req, res) => {
@@ -427,30 +463,38 @@ webServer.post(`${API}/sign-up`, async (req, res) => {
   
   if (!(email && password && surname && name)) {
     logLineAsync(`[${PORT}] ERROR request for new user, missing data`, logPath);
-    return res.status(400).send('MESSAGE_ERROR_FOR_USER').end();
+    return res.status(401).send({ message: MESSAGE.ERROR_FOR_USER_AUTH }).end();
   }
   
   const sid = getRandomString(50);
   
   try {
-    await Users.createANewUser({ email, password, surname, name, sid });
-    logLineAsync(`[${PORT}] new user "${email}" was saved in database`, logPath);
+    await Users.createANewUser({ email, password, surname, name, sid })
+      .then(result => {
+        if (result) {
+          logLineAsync(`[${PORT}] ERROR create new user "${email}"`, logPath);
+          return res.status(401).send({ message: result }).end();
+        } else {
+          logLineAsync(`[${PORT}] new user "${email}" was saved in database`, logPath);
+  
+          let link = `${serverUrl}/confirmation-email?sid=${sid}`;
+  
+          sendEmail(email, { name, surname, link })
+            .then( () => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
+            .catch( err => {
+              logLineAsync(`[${PORT}] ERROR sending email for "${email}", text: ${shortMessage(err)}`, logPath);
+              return res.status(401).send(MESSAGE_ERROR_SENT_EMAIL_FOR_USER).end();
+            });
+  
+          MESSAGE_SUCCESS_FOR_USER.sid = sid;
+          res.status(200).send(MESSAGE_SUCCESS_FOR_USER).end();
+        }
+      });
+    
   } catch (e) {
     logLineAsync(`[${PORT}] ERROR saving user "${email}" in database`, logPath);
-    return res.status(400).send('MESSAGE_ERROR_FOR_USER').end();
+    return res.status(401).send({ message: MESSAGE.ERROR_FOR_USER_AUTH }).end();
   }
-
-  let link = `${serverUrl}/confirmation-email?sid=${sid}`;
-
-  sendEmail(email, { name, surname, link })
-    .then( () => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
-    .catch( err => {
-      logLineAsync(`[${PORT}] ERROR sending email for "${email}", text: ${shortMessage(err)}`, logPath);
-      return res.status(400).send('MESSAGE_ERROR_SENT_EMAIL_FOR_USER').end();
-    });
-  
-  MESSAGE_SUCCESS_FOR_USER.sid = sid;
-  res.status(200).send(MESSAGE_SUCCESS_FOR_USER).end();
 });
 
 webServer.get('/confirmation-email', async (req, res) => {
@@ -466,7 +510,7 @@ webServer.get('/confirmation-email', async (req, res) => {
         res.send(createConfirmationPage(serverUrl, status)).end();
       });
   } catch (e) {
-    logLineAsync(`[${PORT}] ERROR sid confirmation on database work or no sid provided.}`, logPath);
+    logLineAsync(`[${PORT}] ERROR on database work for sid confirmation`, logPath);
     res.send(createConfirmationPage(serverUrl, 'error')).end();
   }
 });

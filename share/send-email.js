@@ -101,21 +101,14 @@ const createConfirmationPage = (link, status) => {
 
 const MESSAGE_SUCCESS_FOR_USER = {
   message: 'На вашу почту было выслано письмо для подтверждения. Пройдите, пожалуйста, на ваш почтовый ящик и перейдите по ссылке указанной в письме для завершения регистрации',
-  error: false,
-};
-const MESSAGE_ERROR_FOR_USER = {
-  message: 'Произошла ошибка! Попробуйте произвести аутентификацию еще раз',
-  error: true,
 };
 const MESSAGE_ERROR_SENT_EMAIL_FOR_USER = {
   message: 'К сожалению письмо для пожтверждения не было выслано',
-  error: true,
 };
 
 export {
   sendEmail,
   createConfirmationPage,
   MESSAGE_SUCCESS_FOR_USER,
-  MESSAGE_ERROR_FOR_USER,
   MESSAGE_ERROR_SENT_EMAIL_FOR_USER,
 }
