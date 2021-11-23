@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
   password: String,
   photoUrl: String,
   createdAt: Date,
+  lastEdited: Date,
   isConfirmed: Boolean,
   isDeleted: Boolean,
   isAdmin: Boolean,

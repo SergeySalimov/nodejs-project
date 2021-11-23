@@ -21,7 +21,7 @@ import {
   MESSAGE_ERROR_FOR_USER,
   MESSAGE_ERROR_SENT_EMAIL_FOR_USER,
   MESSAGE_SUCCESS_FOR_USER,
-  sendEmail
+  sendEmail,
 } from './share/send-email';
 
 const webServer = express();
@@ -453,13 +453,22 @@ webServer.post(`${API}/sign-up`, async (req, res) => {
   res.status(200).send(MESSAGE_SUCCESS_FOR_USER).end();
 });
 
-webServer.get('/confirmation-email', (req, res) => {
-  console.log(req.query);
+webServer.get('/confirmation-email', async (req, res) => {
+  const { sid } = req.query;
   
   res.setHeader('Content-Type', 'text/html; charset=UTF-8');
   res.setHeader('Cache-Control','public, max-age=60');
   
-  res.status(200).send(createConfirmationPage(serverUrl)).end();
+  try {
+    await Users.checkUserConfirmation(sid)
+      .then(status => {
+        logLineAsync(`[${PORT}] confirmation for sid completed, status: ${status}, sid: ${sid}`, logPath);
+        res.send(createConfirmationPage(serverUrl, status)).end();
+      });
+  } catch (e) {
+    logLineAsync(`[${PORT}] ERROR sid confirmation on database work or no sid provided.}`, logPath);
+    res.send(createConfirmationPage(serverUrl, 'error')).end();
+  }
 });
 
 webServer.get('*', (req, res) => {

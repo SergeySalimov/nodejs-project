@@ -52,7 +52,27 @@ function sendEmail(recipientEmail, data) {
   });
 }
 
-const createConfirmationPage = (link, isOk = true) => `
+const createConfirmationPage = (link, status) => {
+  let header, btnStyle, btnMessage;
+  switch (status) {
+    case 'already':
+      header = 'Ваша почта уже была подтверждена!';
+      btnStyle = 'btn-outline-warning';
+      btnMessage = 'Перейти на сайт';
+      break;
+    case 'error':
+      header = 'Ошибка подтверждения почты!';
+      btnStyle = 'btn-warning';
+      btnMessage = 'Попробовать снова';
+      break;
+    case 'done':
+    default:
+      header = 'Ваша почта была подтверждена!';
+      btnStyle = 'btn-outline-primary';
+      btnMessage = 'Перейти на сайт';
+  }
+  
+  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,10 +85,10 @@ const createConfirmationPage = (link, isOk = true) => `
 <div class="container">
     <div class="row">
         <div class="col-sm-12 mt-5 text-center">
-            <h1>${isOk ? 'Ваша почта была подтверждена!' : 'Ошибка подтверждения почты!'}</h1>
+            <h1>${header}</h1>
             <a href="${link}">
-                <button type="button" class="btn ${isOk ? 'btn-outline-primary' : 'btn-warning'} btn-lg mt-3">
-                ${isOk ? 'Перейти на сайт' : 'Попробовать снова'}
+                <button type="button" class="btn ${btnStyle} btn-lg mt-3">
+                ${btnMessage}
                 </button>
             </a>
         </div>
@@ -77,6 +97,7 @@ const createConfirmationPage = (link, isOk = true) => `
 </body>
 </html>
 `;
+};
 
 const MESSAGE_SUCCESS_FOR_USER = {
   message: 'На вашу почту было выслано письмо для подтверждения. Пройдите, пожалуйста, на ваш почтовый ящик и перейдите по ссылке указанной в письме для завершения регистрации',

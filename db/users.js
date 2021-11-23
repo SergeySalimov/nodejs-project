@@ -16,7 +16,8 @@ export default {
         email,
         password,
         sid,
-        createdAt: new Date().toUTCString(),
+        createdAt: new Date(),
+        lastEdited: new Date(),
         photoUrl: '',
         isConfirmed: false,
         isAdmin: false,
@@ -29,5 +30,31 @@ export default {
     } else {
       return Promise.reject();
     }
-  }
+  },
+  checkUserConfirmation: async function(sid) {
+    if (!sid) {
+      return Promise.reject();
+    }
+    
+    await mongoose.connect(DB_ADDRESS, MONGOOSE_OPTIONS);
+    const user = await UserModel.findOne({ sid });
+    let status;
+  
+    if (user) {
+      if (!user.isConfirmed) {
+        user.isConfirmed = true;
+        user.lastEdited = new Date();
+  
+        await user.save();
+        status = 'done';
+      } else {
+        status = 'already';
+      }
+    } else {
+      status = 'error';
+    }
+    
+    mongoose.connection.close();
+    return Promise.resolve(status);
+  },
 };
