@@ -20,3 +20,7 @@ export class IUser {
   public email?: string;
   public password?: string;
 }
+
+export interface IsUserLog {
+  log: boolean;
+}

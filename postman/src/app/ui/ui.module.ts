@@ -21,6 +21,7 @@ import { AuthPageComponent } from './auth-page/auth-page.component';
 import { ForgotPasswordPageComponent } from './auth-page/forgot-password-page/forgot-password-page.component';
 import { DialogOnActionComponent } from './shared/dialog-on-action/dialog-on-action.component';
 import { AlertComponent } from './shared/alert/alert.component';
+import { OptionsPageComponent } from './options-page/options-page.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { AlertComponent } from './shared/alert/alert.component';
     ForgotPasswordPageComponent,
     DialogOnActionComponent,
     AlertComponent,
+    OptionsPageComponent,
   ],
   imports: [
     CommonModule,

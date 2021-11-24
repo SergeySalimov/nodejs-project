@@ -1,79 +1,94 @@
+<ng-container *ngIf="(userService.isUserLogged$ | async) as isUser">
 <div *ngIf="sidenav.opened" class="area-to-close-sidenav" (click)="sidenav.toggle(false)"></div>
-<mat-sidenav-container class="mat-sidenav-container">
-  <mat-sidenav
+  <mat-sidenav-container class="mat-sidenav-container">
+    <mat-sidenav
       #sidenav
       role="navigation"
       class="mat-sidenav"
       fixedInViewport="true"
       fixedTopGap="62"
       fixedBottomGap="56"
-  >
-    <mat-nav-list>
-      <a
-        (click)="sidenav.toggle(false)"
-        type="button"
-        mat-list-item
-        [routerLink]="['/', route.WORK]"
-        routerLinkActive="active"
-      >
-        <mat-icon class="icon">compare_arrows</mat-icon>
-        <span class="label">Работа</span>
-      </a>
-      <a
-        (click)="sidenav.toggle(false)"
-        type="button"
-        mat-list-item
-        [routerLink]="['/' + route.STORAGE]"
-        routerLinkActive="active"
-      >
-        <mat-icon class="icon">storage</mat-icon>
-        <span class="label">Хранилище</span>
-      </a>
-      <a
-        *ngIf="!(userService.isUserLogged$ | async)"
-        (click)="sidenav.toggle(false)"
-        mat-list-item type="button"
-        [routerLink]="['/', route.AUTH]"
-        routerLinkActive="active"
-      >
-        <mat-icon class="icon">login</mat-icon>
-        <span class="label">Войти</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content class="mat-content">
-    <mat-toolbar color="primary">
-      <div fxHide.gt-xs>
-        <button mat-button (click)="sidenav.toggle()">
-          <mat-icon>view_headline</mat-icon>
-        </button>
-      </div>
-      <div>
-        <a [routerLink]="['/', route.HOME]" class="ml-2">Главная</a>
-      </div>
-      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxFlexAlign="center" fxHide.xs>
-        <ul fxLayout class="navigation-items">
-          <li fxLayoutAlign="flex-end">
-            <a [routerLink]="['/', route.STORAGE]" routerLinkActive="active">
-              <mat-icon class="icon">storage</mat-icon>
-              <span class="label">Хранилище</span>
-            </a>
-          </li>
-          <li fxLayoutAlign="flex-end">
-            <a [routerLink]="['/', route.WORK]" routerLinkActive="active">
-              <mat-icon class="icon">compare_arrows</mat-icon>
-              <span class="label">Работа</span>
-            </a>
-          </li>
-          <li *ngIf="!(userService.isUserLogged$ | async)" fxLayoutAlign="flex-end">
-            <a [routerLink]="['/', route.AUTH]" routerLinkActive="active">
-              <mat-icon class="icon">login</mat-icon>
-              <span class="label">Войти</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </mat-toolbar>
+    >
+      <mat-nav-list>
+        <a
+          *ngIf="isUser.log"
+          (click)="sidenav.toggle(false)"
+          type="button"
+          mat-list-item
+          [routerLink]="['/', route.WORK]"
+          routerLinkActive="active"
+        >
+          <mat-icon class="icon">compare_arrows</mat-icon>
+          <span class="label">Работа</span>
+        </a>
+        <a
+          *ngIf="isUser.log"
+          (click)="sidenav.toggle(false)"
+          type="button"
+          mat-list-item
+          [routerLink]="['/' + route.STORAGE]"
+          routerLinkActive="active"
+        >
+          <mat-icon class="icon">storage</mat-icon>
+          <span class="label">Хранилище</span>
+        </a>
+        <a
+          *ngIf="!isUser.log"
+          (click)="sidenav.toggle(false)"
+          mat-list-item type="button"
+          [routerLink]="['/', route.AUTH]"
+          routerLinkActive="active"
+        >
+          <mat-icon class="icon">login</mat-icon>
+          <span class="label">Войти</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="mat-content">
+      <mat-toolbar color="primary">
+        <div fxHide.gt-xs>
+          <button mat-button (click)="sidenav.toggle()">
+            <mat-icon>view_headline</mat-icon>
+          </button>
+        </div>
+        <div>
+          <a [routerLink]="['/', route.HOME]" class="ml-2">Главная</a>
+        </div>
+        <div fxFlex fxLayout fxLayoutAlign="flex-end" fxFlexAlign="center" fxHide.xs>
+          <ul fxLayout class="navigation-items">
+            <li *ngIf="isUser.log" fxLayoutAlign="flex-end">
+              <a [routerLink]="['/', route.STORAGE]" routerLinkActive="active">
+                <mat-icon class="icon">storage</mat-icon>
+                <span class="label">Хранилище</span>
+              </a>
+            </li>
+            <li *ngIf="isUser.log" fxLayoutAlign="flex-end">
+              <a [routerLink]="['/', route.WORK]" routerLinkActive="active">
+                <mat-icon class="icon">compare_arrows</mat-icon>
+                <span class="label">Работа</span>
+              </a>
+            </li>
+            <li *ngIf="!isUser.log" fxLayoutAlign="flex-end">
+              <a [routerLink]="['/', route.AUTH]" routerLinkActive="active">
+                <mat-icon class="icon">login</mat-icon>
+                <span class="label">Войти</span>
+              </a>
+            </li>
+            <li fxLayoutAlign="flex-end">
+              <a *ngIf="isUser.log" (click)="onLogout()">
+                <mat-icon class="icon">logout</mat-icon>
+                <span class="label">Выйти</span>
+              </a>
+            </li>
+            <li fxLayoutAlign="flex-end">
+              <a *ngIf="isUser.log" [routerLink]="['/', route.OPTIONS]">
+                <mat-icon class="icon" style="transform: scale(1.5);">person</mat-icon>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </mat-toolbar>
 
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>

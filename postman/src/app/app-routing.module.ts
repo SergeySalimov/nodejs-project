@@ -7,6 +7,9 @@ import { AuthEnum, RouteEnum } from './app-routing.constant';
 import { StoragePageComponent } from './ui/storage-page/storage-page.component';
 import { AuthPageComponent } from './ui/auth-page/auth-page.component';
 import { ForgotPasswordPageComponent } from './ui/auth-page/forgot-password-page/forgot-password-page.component';
+import { AuthGuard } from './services/auth.guard';
+import { NoAuthGuard } from './services/no-auth.guard';
+import { OptionsPageComponent } from './ui/options-page/options-page.component';
 
 const routes: Routes = [
   {
@@ -16,37 +19,35 @@ const routes: Routes = [
     path: RouteEnum.HOME, component: HomePageComponent,
   },
   {
-    path: `${RouteEnum.WORK}/:id`, component: WorkPageComponent,
+    path: `${RouteEnum.WORK}/:id`, component: WorkPageComponent, canActivate: [AuthGuard]
   },
   {
-    path: RouteEnum.WORK, component: WorkPageComponent,
+    path: RouteEnum.WORK, component: WorkPageComponent, canActivate: [AuthGuard]
   },
   {
-    path: RouteEnum.STORAGE, component: StoragePageComponent,
+    path: RouteEnum.STORAGE, component: StoragePageComponent, canActivate: [AuthGuard]
   },
   {
-    path: RouteEnum.AUTH, redirectTo: `${RouteEnum.AUTH}/${AuthEnum.LOG_IN}`, pathMatch: 'full',
+    path: RouteEnum.OPTIONS, component: OptionsPageComponent, canActivate: [AuthGuard]
+  },
+  {
+    path: RouteEnum.AUTH, redirectTo: `${RouteEnum.AUTH}/${AuthEnum.LOG_IN}`, pathMatch: 'full', canActivate: [NoAuthGuard]
   },
   {
     path: RouteEnum.AUTH,
+    canActivate: [NoAuthGuard],
     children: [
       {
         path: AuthEnum.SIGN_UP,
         component: AuthPageComponent,
-        // ToDo add guard here
-        canActivate: [],
       },
       {
         path: AuthEnum.LOG_IN,
         component: AuthPageComponent,
-        // ToDo add guard here
-        canActivate: [],
       },
       {
         path: AuthEnum.FORGOT_PSWD,
         component: ForgotPasswordPageComponent,
-        // ToDo add guard here
-        canActivate: [],
       },
     ],
   },

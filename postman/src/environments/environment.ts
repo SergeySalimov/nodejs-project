@@ -2,9 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { RouteEnum } from '../app/app-routing.constant';
+
 export const environment = {
   production: false,
   webSocketUrl: 'ws://localhost:7781',
+  URL_AFTER_LOGIN: `/${RouteEnum.STORAGE}`,
   // webSocketUrl: 'ws://178.172.195.18:7781',
 };
 

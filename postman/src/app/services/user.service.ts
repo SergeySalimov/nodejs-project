@@ -1,24 +1,33 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IUser } from '../interfaces/i-user';
+import { IsUserLog, IUser } from '../interfaces/i-user';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { MessageDto } from '../interfaces/interfaces.dto';
 import { ROOT_URL } from '../interfaces/constant';
 import { finalize } from 'rxjs/operators';
 import { MessageService } from './message.service';
+import { Router } from '@angular/router';
+import { AuthEnum, RouteEnum } from '../app-routing.constant';
+import { environment } from '../../environments/environment';
+
+const xTokenKey = 'xToken';
 
 @Injectable()
 export class UserService {
   private $isLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoaded$: Observable<boolean> = this.$isLoaded.asObservable();
-  private $isUserLogged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  isUserLogged$: Observable<boolean> = this.$isUserLogged.asObservable();
+  private $isUserLogged: BehaviorSubject<IsUserLog> = new BehaviorSubject<IsUserLog>({ log: false });
+  isUserLogged$: Observable<IsUserLog> = this.$isUserLogged.asObservable();
+  private $xToken: BehaviorSubject<string> = new BehaviorSubject<string>(localStorage.getItem(xTokenKey));
+  private $userData: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(null);
+  userData$: Observable<IUser> = this.$userData.asObservable();
   
-  constructor(private readonly http: HttpClient, private readonly messageService: MessageService) {
-  }
   
-  changeUserState(log: boolean): void {
-    this.$isUserLogged.next(log);
+  constructor(
+    private readonly http: HttpClient,
+    private readonly messageService: MessageService,
+    private readonly router: Router,
+  ) {
   }
   
   signUpWithEmail(newUser: IUser): void {
@@ -29,6 +38,7 @@ export class UserService {
       }),
     ).subscribe((data: MessageDto) => {
         this.messageService.createNewToast(data.message, true);
+        this.router.navigateByUrl(`/${RouteEnum.AUTH}/${AuthEnum.LOG_IN}`);
       },
       (data: HttpErrorResponse) => this.messageService.createNewToast(data.error.message, false),
     );
@@ -42,6 +52,11 @@ export class UserService {
       }),
     ).subscribe((data: HttpResponse<any>) => {
         const xToken = data.headers.get('X-Token');
+        if (xToken) {
+          this.$isUserLogged.next({ log: true });
+          localStorage.setItem(xTokenKey, JSON.stringify(xToken));
+          this.router.navigateByUrl(environment.URL_AFTER_LOGIN);
+        }
         console.log(xToken);
       },
       (data: HttpErrorResponse) => this.messageService.createNewToast(data.error.message, false),
@@ -50,5 +65,10 @@ export class UserService {
   
   sendForgottenPassword(): any {
     console.log('sendForgottenPassword');
+  }
+  
+  logOut():void {
+    this.$isUserLogged.next({ log: false });
+    this.router.navigateByUrl(`/${RouteEnum.AUTH}/${AuthEnum.LOG_IN}`);
   }
 }

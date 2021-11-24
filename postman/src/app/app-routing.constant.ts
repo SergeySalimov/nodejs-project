@@ -3,6 +3,7 @@ export enum RouteEnum {
   WORK = 'work',
   STORAGE = 'storage',
   AUTH = 'auth',
+  OPTIONS = 'options',
 }
 
 export enum AuthEnum {
