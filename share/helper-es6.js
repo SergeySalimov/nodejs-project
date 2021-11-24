@@ -134,6 +134,17 @@ function addHours(hours) {
   return new Date(Date.now() + hours * (60 * 60 * 1000) );
 }
 
+function cutUser(user) {
+  return {
+    name: user.name,
+    surname: user.surname,
+    email: user.email,
+    createdAt: user.createdAt,
+    lastEdited: user.lastEdited,
+    photoUrl: user.photoUrl,
+  };
+}
+
 export {
   logLineSync,
   logLineAsync,
@@ -146,4 +157,5 @@ export {
   getRandomString,
   removeTags,
   addHours,
+  cutUser,
 };

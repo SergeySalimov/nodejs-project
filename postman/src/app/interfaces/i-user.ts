@@ -19,6 +19,9 @@ export class IUser {
   public id?: string;
   public email?: string;
   public password?: string;
+  public createdAt?: Date;
+  public lastEdited?: Date;
+  public photoUrl?: string;
 }
 
 export interface IsUserLog {

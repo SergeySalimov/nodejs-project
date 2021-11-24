@@ -74,7 +74,13 @@ export default {
       return Promise.resolve({ error: 'no email or psw for check password' });
     }
     
-    const result = { error: null, isMatch: false, isUserExists: false, isSIDConfirmed: false };
+    const result = {
+      error: null,
+      isMatch: false,
+      isUserExists: false,
+      isSIDConfirmed: false,
+      user: {},
+    };
   
     await mongoose.connect(DB_ADDRESS, MONGOOSE_OPTIONS);
     
@@ -88,6 +94,8 @@ export default {
         .catch(() => result.error = 'error on bcrypt.compare work')
       ;
     }
+    
+    result.user = user;
   
     mongoose.connection.close();
     return Promise.resolve(result);

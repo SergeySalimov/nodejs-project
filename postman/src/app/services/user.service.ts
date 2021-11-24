@@ -22,7 +22,6 @@ export class UserService {
   private $userData: BehaviorSubject<IUser> = new BehaviorSubject<IUser>(null);
   userData$: Observable<IUser> = this.$userData.asObservable();
   
-  
   constructor(
     private readonly http: HttpClient,
     private readonly messageService: MessageService,
@@ -56,6 +55,8 @@ export class UserService {
           this.$isUserLogged.next({ log: true });
           localStorage.setItem(xTokenKey, JSON.stringify(xToken));
           this.router.navigateByUrl(environment.URL_AFTER_LOGIN);
+          this.messageService.createNewToast(data.body.message, true);
+          this.$userData.next(data.body.user);
         }
         console.log(xToken);
       },

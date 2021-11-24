@@ -9,6 +9,7 @@ import {
   addTimeFromNow,
   checkIdValidity,
   createSecureUploadData,
+  cutUser,
   getNewId,
   getRandomString,
   logLineAsync,
@@ -410,47 +411,50 @@ webServer.post(`${API}/sign-in`, async (req, res) => {
     return res.status(400).end();
   }
   
+  let user;
   try {
-   await Users.checkUserAndPassword(email, password)
-     .then(result => {
-       if(result.error) {
-         logLineAsync(`[${PORT}] ERROR on check user password "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
-         return res.status(401).send({ message: MESSAGE.ERROR_BAD_DATA }).end();
-       }
-       
-       if (!result.isUserExists) {
-         logLineAsync(`[${PORT}] ERROR sign-in for user "${email}"`, logPath);
-         return res.status(401).send({ message: MESSAGE.ERROR_USER_DO_NOT_EXISTS }).end();
-       }
-       
-       if (!result.isMatch) {
-         logLineAsync(`[${PORT}] ERROR sign-in for user "${email}"`, logPath);
-         return res.status(401).send({ message: MESSAGE.ERROR_PASSWORD_INCORRECT }).end();
-       }
-       
-       if (!result.isSIDConfirmed) {
-         logLineAsync(`[${PORT}] sign-in for user "${email} without confirmation"`, logPath);
-         return res.status(401).send({ message: MESSAGE.ERROR_NO_CONFIRMATION }).end();
-       }
-     });
-  
-   await Session.createUpdateSession(email).then(result => {
-     if(result.error) {
-       logLineAsync(`[${PORT}] ERROR on save session "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
-       return res.status(401).send({ message: MESSAGE.ERROR_BAD_DATA }).end();
-     }
-     
-     if(!result.xToken) {
-       logLineAsync(`[${PORT}] ERROR on save session "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
-       return res.status(401).send({ message: MESSAGE.ERROR_UNAUTHORIZED }).end();
-     } else {
-  
-       logLineAsync(`[${PORT}] user authorized and sent xToken for "${email}"`, logPath);
-       res.setHeader('X-Token', result.xToken);
-       res.status(200).send({message: MESSAGE.SUCCESS_LOGIN}).end();
-     }
-   });
-   
+    await Users.checkUserAndPassword(email, password)
+      .then(result => {
+        if (result.error) {
+          logLineAsync(`[${PORT}] ERROR on check user password "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
+          return res.status(401).send({ message: MESSAGE.ERROR_BAD_DATA }).end();
+        }
+        
+        if (!result.isUserExists) {
+          logLineAsync(`[${PORT}] ERROR sign-in for user "${email}"`, logPath);
+          return res.status(401).send({ message: MESSAGE.ERROR_USER_DO_NOT_EXISTS }).end();
+        }
+        
+        if (!result.isMatch) {
+          logLineAsync(`[${PORT}] ERROR sign-in for user "${email}"`, logPath);
+          return res.status(401).send({ message: MESSAGE.ERROR_PASSWORD_INCORRECT }).end();
+        }
+        
+        if (!result.isSIDConfirmed) {
+          logLineAsync(`[${PORT}] sign-in for user "${email} without confirmation"`, logPath);
+          return res.status(401).send({ message: MESSAGE.ERROR_NO_CONFIRMATION }).end();
+        }
+        
+        user = result.user;
+      });
+    
+    await Session.createUpdateSession(email).then(result => {
+      if (result.error) {
+        logLineAsync(`[${PORT}] ERROR on save session "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
+        return res.status(401).send({ message: MESSAGE.ERROR_BAD_DATA }).end();
+      }
+      
+      if (!result.xToken) {
+        logLineAsync(`[${PORT}] ERROR on save session "${email}", error: ${shortMessage(result.error, 20)}`, logPath);
+        return res.status(401).send({ message: MESSAGE.ERROR_UNAUTHORIZED }).end();
+      } else {
+        
+        logLineAsync(`[${PORT}] user authorized and sent xToken for "${email}"`, logPath);
+        res.setHeader('X-Token', result.xToken);
+        res.status(200).send({ message: MESSAGE.SUCCESS_LOGIN, user: cutUser(user) }).end();
+      }
+    });
+    
   } catch (e) {
     logLineAsync(`[${PORT}] ERROR on database work on check password for email "${email}".}`, logPath);
     return res.status(400).end();
@@ -476,16 +480,16 @@ webServer.post(`${API}/sign-up`, async (req, res) => {
           return res.status(401).send({ message: result }).end();
         } else {
           logLineAsync(`[${PORT}] new user "${email}" was saved in database`, logPath);
-  
+          
           let link = `${serverUrl}/confirmation-email?sid=${sid}`;
-  
+          
           sendEmail(email, { name, surname, link })
-            .then( () => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
-            .catch( err => {
+            .then(() => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
+            .catch(err => {
               logLineAsync(`[${PORT}] ERROR sending email for "${email}", text: ${shortMessage(err)}`, logPath);
               return res.status(401).send(MESSAGE_ERROR_SENT_EMAIL_FOR_USER).end();
             });
-  
+          
           MESSAGE_SUCCESS_FOR_USER.sid = sid;
           res.status(200).send(MESSAGE_SUCCESS_FOR_USER).end();
         }
@@ -501,7 +505,7 @@ webServer.get('/confirmation-email', async (req, res) => {
   const { sid } = req.query;
   
   res.setHeader('Content-Type', 'text/html; charset=UTF-8');
-  res.setHeader('Cache-Control','public, max-age=60');
+  res.setHeader('Cache-Control', 'public, max-age=60');
   
   try {
     await Users.checkUserConfirmation(sid)
