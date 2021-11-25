@@ -8,8 +8,8 @@
 _nodemon.log
 nginx_caches/
 /nginx_logs/
-/ngnix_conf/
 **/dist
 /data/
 /uploaded/
 /credentials/
+/nginx_conf/
