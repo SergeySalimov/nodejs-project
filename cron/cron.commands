@@ -1,0 +1,31 @@
+Создание дампа с в папке типа год-месяц-день
+mongodump --out /home/user/nodejs-project/db/backups/`date +"%y-%m-%d"`
+Создание дампа только бд postman в папке типа год-месяц-день
+mongodump --db postman --out /home/user/nodejs-project/db/backups/`date +"%y-%m-%d"`
+Создание дампа в архив в файл вида год-месяц-день.gz
+mongodump --db postman --gzip --archive  > /home/user/nodejs-project/db/backups/`date +"%y-%m-%d"`.gz
+комманда для крона каждый день в 3:05
+sudo crontab -e
+5 3 * * * mongodump --db postman --gzip --archive  > /home/user/nodejs-project/db/backups/`date +"%y-%m-%d"`.gz
+
+Удалять дампы старше 10 дней не удаляя папку каждый день в 3:01
+find /home/user/nodejs-project/db/backups/* -mtime +10 -exec rm -rf {} \;
+комманда для крона
+1 3 * * * find /home/user/nodejs-project/db/backups/* -mtime +10 -exec rm -rf {} \;
+
+vim
+i - insert mode
+esq - exit insert mode
+
+:w + enter - save changes
+:q + enter - quit vim
+
+восстановление из дампа хранящемся в файле recovery.gz
+mongorestore --drop --gzip --archive=/home/user/nodejs-project/db/backups/recovery.gz --db postman
+
+моя рабочая версия для сайта:
+
+# delete file older then 10 days each day on 03:01
+1 3 * * * find /home/user/nodejs-project/db/backups/* -mtime +10 -exec rm -rf {} \;
+# create backup from database each day on 03:05 in archive with name yy-mm-dd
+5 3 * * * mongodump --db postman --gzip --archive  > /home/user/nodejs-project/db/backups/`date +"%y-%m-%d"`.gz
