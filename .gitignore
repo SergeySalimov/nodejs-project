@@ -7,7 +7,7 @@
 **/uploads
 _nodemon.log
 nginx_caches/
-/nginx_log/
+/nginx_logs/
 **/dist
 /data/
 /uploaded/
