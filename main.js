@@ -57,6 +57,7 @@ webServer.use((req, res, next) => {
   logLineAsync(`[${PORT}] url=${req.originalUrl} called`, logPath);
   next();
 });
+// this will be sent by nginx
 webServer.use(express.static(process.cwd() + pathToAppDist));
 
 webServer.get(`${API}/histories`, (req, res) => {
@@ -520,9 +521,9 @@ webServer.get('/confirmation-email', async (req, res) => {
 });
 
 // this will be sent by nginx
-// webServer.get('*', (req, res) => {
-//   res.sendFile(process.cwd() + pathToAppDist + 'index.html');
-// });
+webServer.get('*', (req, res) => {
+  res.sendFile(process.cwd() + pathToAppDist + 'index.html');
+});
 
 webServer.listen(PORT, () => {
   logLineAsync(`Backend server has been started on port ${PORT} in ${process.env.NODE_ENV} mode ......`, logPath);

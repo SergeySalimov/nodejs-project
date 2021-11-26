@@ -12,5 +12,4 @@ nginx_caches/
 /data/
 /uploaded/
 /credentials/
-/nginx_conf/
 /db/backups/
