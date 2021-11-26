@@ -13,5 +13,4 @@ nginx_caches/
 /uploaded/
 /credentials/
 /nginx_conf/
-/cron/
 /db/backups/
