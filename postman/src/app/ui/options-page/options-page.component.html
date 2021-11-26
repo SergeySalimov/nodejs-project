@@ -6,11 +6,11 @@
         <mat-card-title>{{user.email}}</mat-card-title>
       </mat-card-header>
       <mat-card-content class="card-content">
-        <p><span>Имя: </span>{{user.name}}</p>
-        <p><span>Фамилия: </span>{{user.surname}}</p>
-        <p><span>Email: </span>{{user.email}}</p>
-        <p><span>Создан: </span>{{user.createdAt | date : 'dd.MM.yyyy'}}</p>
-        <p><span>Обновлен: </span>{{user.lastEdited | date : 'dd.MM.yyyy'}}</p>
+        <p><span>Имя: </span><strong>{{user.name}}</strong></p>
+        <p><span>Фамилия: </span><strong>{{user.surname}}</strong></p>
+        <p><span>Email: </span><strong>{{user.email}}</strong></p>
+        <p><span>Создан: </span><strong>{{user.createdAt | date : 'dd.MM.yyyy HH:mm'}}</strong></p>
+        <p><span>Обновлен: </span><strong>{{user.lastEdited | date : 'dd.MM.yyyy HH:mm'}}</strong></p>
       </mat-card-content>
     </mat-card>
   </div>

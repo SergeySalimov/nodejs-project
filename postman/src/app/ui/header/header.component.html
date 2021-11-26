@@ -11,6 +11,16 @@
     >
       <mat-nav-list>
         <a
+          (click)="sidenav.toggle(false)"
+          type="button"
+          mat-list-item
+          [routerLink]="['/', route.HOME]"
+          routerLinkActive="active"
+        >
+          <mat-icon class="icon">home</mat-icon>
+          <span class="label">Главная</span>
+        </a>
+        <a
           *ngIf="isUser.log"
           (click)="sidenav.toggle(false)"
           type="button"
@@ -41,6 +51,27 @@
         >
           <mat-icon class="icon">login</mat-icon>
           <span class="label">Войти</span>
+        </a>
+        <a
+          *ngIf="isUser.log"
+          (click)="sidenav.toggle(false); onLogout()"
+          type="button"
+          mat-list-item
+          routerLinkActive="active"
+        >
+          <mat-icon class="icon">logout</mat-icon>
+          <span class="label">Выйти</span>
+        </a>
+        <a
+          *ngIf="isUser.log"
+          (click)="sidenav.toggle(false)"
+          type="button"
+          mat-list-item
+          [routerLink]="['/', route.OPTIONS]"
+          routerLinkActive="active"
+        >
+          <mat-icon class="icon">person</mat-icon>
+          <span class="label">Настройки</span>
         </a>
       </mat-nav-list>
     </mat-sidenav>

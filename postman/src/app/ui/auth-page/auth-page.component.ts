@@ -14,6 +14,7 @@ export class AuthPageComponent implements OnDestroy {
   public user: IUser = new IUser();
   public logStatus: AuthEnum = this.route.snapshot.url[0].path as AuthEnum;
   public eLog = AuthEnum;
+  routeEnum = RouteEnum;
   public securityRoute = `/${RouteEnum.AUTH}/`;
   public hidePassword = true;
   private subscription: Subscription;
