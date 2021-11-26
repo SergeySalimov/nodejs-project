@@ -8,7 +8,6 @@ export const environment = {
   production: false,
   webSocketUrl: 'ws://localhost:7781',
   URL_AFTER_LOGIN: `/${RouteEnum.STORAGE}`,
-  // webSocketUrl: 'ws://178.172.195.18:7781',
 };
 
 /*
