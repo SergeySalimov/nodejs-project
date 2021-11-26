@@ -1,0 +1,17 @@
+{
+  "name": "autocompressor-hw5693",
+  "version": "1.0.0",
+  "description": "",
+  "main": "autozip.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compress": "node autozip.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "stream": "0.0.2",
+    "zlib": "^1.0.5"
+  }
+}
