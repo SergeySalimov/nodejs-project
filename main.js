@@ -519,9 +519,10 @@ webServer.get('/confirmation-email', async (req, res) => {
   }
 });
 
-webServer.get('*', (req, res) => {
-  res.sendFile(process.cwd() + pathToAppDist + 'index.html');
-});
+// this will be sent by nginx
+// webServer.get('*', (req, res) => {
+//   res.sendFile(process.cwd() + pathToAppDist + 'index.html');
+// });
 
 webServer.listen(PORT, () => {
   logLineAsync(`Backend server has been started on port ${PORT} in ${process.env.NODE_ENV} mode ......`, logPath);
