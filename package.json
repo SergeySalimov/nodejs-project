@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
+    "helmet": "^4.6.0",
     "ignore-styles": "^5.0.1",
     "isomorphic-fetch": "^3.0.0",
     "mongoose": "^5.13.8",
