@@ -25,6 +25,9 @@ import {
 import MESSAGE from "./share/messages";
 import Session from "./db/session";
 import helmet from 'helmet';
+import { SitemapStream, streamToPromise } from 'sitemap';
+import { createGzip } from 'zlib';
+import { Readable } from 'stream';
 
 const webServer = express();
 const PORT = 7780;
@@ -50,10 +53,11 @@ if (process.env.NODE_ENV === 'production') {
 const webSocketServer = new WebSocket.Server({ port: WS_PORT });
 logLineAsync(`Websocket server has been created on port ${WS_PORT}`, logPath);
 let webSocketClients = [];
+let sitemap;
 
 webServer.use(express.urlencoded({ extended: true }));
 webServer.use(express.json({ extended: true }));
-// webServer.use(helmet());
+webServer.use(helmet());
 webServer.use(cors(CORS_OPTIONS));
 webServer.use((req, res, next) => {
   logLineAsync(`[${PORT}] url=${req.originalUrl} called`, logPath);
@@ -519,6 +523,48 @@ webServer.get('/confirmation-email', async (req, res) => {
   } catch (e) {
     logLineAsync(`[${PORT}] ERROR on database work for sid confirmation`, logPath);
     res.send(createConfirmationPage(serverUrl, 'error')).end();
+  }
+});
+
+webServer.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  
+  if (process.env.NODE_ENV === 'production') {
+    res.send('User-agent: *\nDisallow: /auth \nSitemap: /sitemap.xml');
+  } else {
+    res.send('User-agent: *\nDisallow: /');
+  }
+});
+
+webServer.get('/sitemap.xml',(req, res) => {
+  res.header('Content-Type', 'application/xml');
+  res.header('Content-Encoding', 'gzip');
+  
+  if (sitemap) {
+    res.send(sitemap);
+    return;
+  }
+  
+  try {
+    const smStream = new SitemapStream({ hostname: serverUrl });
+    const pipeline = smStream.pipe(createGzip());
+    
+    // pipe your entries or directly write them.
+    smStream.write({ url: '/',  changefreq: 'never', priority: 0.8 });
+    smStream.write({ url: '/home',  changefreq: 'never', priority: 0.8 });
+    /* or use
+    Readable.from([{url: '/page-1'}...]).pipe(smStream)
+    if you are looking to avoid writing your own loop.
+    */
+    // cache the response
+    streamToPromise(pipeline).then(sm => sitemap = sm);
+    // make sure to attach a write stream such as streamToPromise before ending
+    smStream.end();
+    // stream write the response
+    pipeline.pipe(res).on('error', (e) => {throw e})
+  } catch (e) {
+    logLineAsync(`[${PORT}] ERROR on creation sitemap.xml`, logPath);
+    res.status(500).end()
   }
 });
 
