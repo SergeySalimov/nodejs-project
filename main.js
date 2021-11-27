@@ -537,7 +537,7 @@ webServer.get('/robots.txt', (req, res) => {
 webServer.get('/sitemap.xml',(req, res) => {
   res.header('Content-Type', 'application/xml');
   res.header('Content-Encoding', 'gzip');
-  
+  // if we have a cached entry send it
   if (sitemap) {
     res.send(sitemap);
     return;
@@ -548,8 +548,9 @@ webServer.get('/sitemap.xml',(req, res) => {
     const pipeline = smStream.pipe(createGzip());
     
     // pipe your entries or directly write them.
-    smStream.write({ url: '/',  changefreq: 'never', priority: 0.8 });
-    smStream.write({ url: '/home',  changefreq: 'never', priority: 0.8 });
+    smStream.write({ url: '/',  changefreq: 'never', priority: 0.7 });
+    smStream.write({ url: '/home',  changefreq: 'never', priority: 0.6 });
+    smStream.write({ url: '/about',  changefreq: 'monthly', priority: 0.8 });
     /* or use
     Readable.from([{url: '/page-1'}...]).pipe(smStream)
     if you are looking to avoid writing your own loop.
