@@ -24,7 +24,6 @@ import {
 } from './share/send-email';
 import MESSAGE from "./share/messages";
 import Session from "./db/session";
-import helmet from 'helmet';
 import { SitemapStream, streamToPromise } from 'sitemap';
 import { createGzip } from 'zlib';
 import { Readable } from 'stream';
@@ -57,7 +56,6 @@ let sitemap;
 
 webServer.use(express.urlencoded({ extended: true }));
 webServer.use(express.json({ extended: true }));
-webServer.use(helmet());
 webServer.use(cors(CORS_OPTIONS));
 webServer.use((req, res, next) => {
   logLineAsync(`[${PORT}] url=${req.originalUrl} called`, logPath);
