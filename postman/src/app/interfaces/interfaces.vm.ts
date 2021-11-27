@@ -13,3 +13,14 @@ export interface RequestForm {
   query?: KeyValueInterface[];
   id?: string;
 }
+
+export interface AboutData {
+  name: string;
+  link: string;
+  description?: string;
+}
+
+export interface About {
+  content: string;
+  data: AboutData[];
+}

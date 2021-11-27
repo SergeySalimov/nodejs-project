@@ -1,0 +1,11 @@
+:host {
+  position: fixed;
+  height: var(--main-height);
+  width: auto;
+  top: var(--header-height);
+  bottom: var(--footer-height);
+  left: var(--x-margin);
+  right: var(--x-margin);
+  overflow-y: visible;
+  overflow-x: hidden;
+}

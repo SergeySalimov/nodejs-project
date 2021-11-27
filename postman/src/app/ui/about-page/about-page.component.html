@@ -1,0 +1,16 @@
+<div class="row">
+  <h2 class="text-center mt-4 mb-5 h1">О проекте</h2>
+
+  <div class="col-sm-12 offset-md-2 col-md-8">
+    <mat-tab-group>
+      <mat-tab *ngFor="let page of about; let i = index" [label]="page.content">
+        <div class="mt-3" *ngFor="let content of page.data">
+          <strong><p>{{ content.name }}:</p></strong>
+          <span class="my-2"><a [href]="content.link" target="_blank">{{content.link}}</a></span>
+          <p *ngIf="content.description" class="mt-3">{{content.description}}</p>
+          <hr>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 <ng-container *ngIf="(userService.isUserLogged$ | async) as isUser">
-<div *ngIf="sidenav.opened" class="area-to-close-sidenav" (click)="sidenav.toggle(false)"></div>
+  <div *ngIf="sidenav.opened" class="area-to-close-sidenav" (click)="sidenav.toggle(false)"></div>
   <mat-sidenav-container class="mat-sidenav-container">
     <mat-sidenav
       #sidenav
@@ -73,6 +73,16 @@
           <mat-icon class="icon">person</mat-icon>
           <span class="label">Настройки</span>
         </a>
+        <a
+          (click)="sidenav.toggle(false)"
+          type="button"
+          mat-list-item
+          [routerLink]="['/', route.ABOUT]"
+          routerLinkActive="active"
+        >
+          <mat-icon class="icon">info</mat-icon>
+          <span class="label">О создании</span>
+        </a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content class="mat-content">
@@ -112,8 +122,13 @@
               </a>
             </li>
             <li fxLayoutAlign="flex-end">
-              <a *ngIf="isUser.log" [routerLink]="['/', route.OPTIONS]">
+              <a *ngIf="isUser.log" [routerLink]="['/', route.OPTIONS]" routerLinkActive="active">
                 <mat-icon class="icon" style="transform: scale(1.5);">person</mat-icon>
+              </a>
+            </li>
+            <li fxLayoutAlign="flex-end">
+              <a [routerLink]="['/', route.ABOUT]" routerLinkActive="active" class="about-link">
+                <mat-icon class="icon" style="transform: scale(2)">info</mat-icon>
               </a>
             </li>
           </ul>

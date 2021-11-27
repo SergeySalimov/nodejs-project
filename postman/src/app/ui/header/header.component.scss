@@ -1,4 +1,10 @@
 :host {
+  .about-link {
+    width: 7rem;
+    display: flex;
+    align-items: center;
+  }
+
   .area-to-close-sidenav {
     position: absolute;
     top: 0;

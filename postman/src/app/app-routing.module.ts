@@ -10,6 +10,7 @@ import { ForgotPasswordPageComponent } from './ui/auth-page/forgot-password-page
 import { AuthGuard } from './services/auth.guard';
 import { NoAuthGuard } from './services/no-auth.guard';
 import { OptionsPageComponent } from './ui/options-page/options-page.component';
+import { AboutPageComponent } from './ui/about-page/about-page.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,15 @@ const routes: Routes = [
       title: 'Home page',
       description: 'miniPostman application',
       keywords: 'Postman app, MiniPostman, home'
+    },
+  },
+  {
+    path: RouteEnum.ABOUT,
+    component: AboutPageComponent,
+    data: {
+      title: 'About page',
+      description: 'all about development',
+      keywords: 'miniPostman, development, node js'
     },
   },
   {

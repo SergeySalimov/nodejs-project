@@ -22,6 +22,7 @@ import { ForgotPasswordPageComponent } from './auth-page/forgot-password-page/fo
 import { DialogOnActionComponent } from './shared/dialog-on-action/dialog-on-action.component';
 import { AlertComponent } from './shared/alert/alert.component';
 import { OptionsPageComponent } from './options-page/options-page.component';
+import { AboutPageComponent } from './about-page/about-page.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { OptionsPageComponent } from './options-page/options-page.component';
     DialogOnActionComponent,
     AlertComponent,
     OptionsPageComponent,
+    AboutPageComponent,
   ],
   imports: [
     CommonModule,

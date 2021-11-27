@@ -37,6 +37,7 @@ $grid-breakpoints: (
 :root {
   --header-height: 62px;
   --footer-height: 56px;
+  --x-margin: 10px;
   --main-height: calc(100vh - (62px + 56px));
   --sidenav-width: 250px;
 

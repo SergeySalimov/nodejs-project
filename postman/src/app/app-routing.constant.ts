@@ -4,6 +4,7 @@ export enum RouteEnum {
   STORAGE = 'storage',
   AUTH = 'auth',
   OPTIONS = 'options',
+  ABOUT = 'about',
 }
 
 export enum AuthEnum {
