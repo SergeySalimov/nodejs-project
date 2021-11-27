@@ -41,11 +41,11 @@ export class AboutPageComponent {
       content: 'Скорость', data:
         [
           {
-            name: 'Настроено кэшироание ответов на get запросы на Express',
+            name: 'Настроено кэширование ответов на get запросы на Express',
             link: 'https://github.com/SergeySalimov/nodejs-project/blob/master/main.js#L67',
           },
           {
-            name: 'Настроено кэшироание ответов на post запросы на Express',
+            name: 'Настроено кэширование ответов на post запросы на Express',
             link: 'https://github.com/SergeySalimov/nodejs-project/blob/master/main.js#L189',
           },
           {
@@ -80,7 +80,7 @@ export class AboutPageComponent {
             name: 'Динамическое создание title, meta keywords, description для каждой страницы через сервис',
             link: 'https://github.com/SergeySalimov/nodejs-project/blob/master/postman/src/app/app-routing.module.ts#L19',
             description: 'В зависимости от выбранного роута, через seo.service подставляется значение для title, keywords ' +
-              'и description. Соответственно каждая страница будет иметь свои значения для этих пеерменных, которые прописанны для каждого роута.'
+              'и description. Соответственно каждая страница будет иметь свои значения для этих переменных, и у каждой страницы в head они будут различаться.'
           },
           {
             name: 'Создание файла robots.txt',
