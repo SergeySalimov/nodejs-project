@@ -10,7 +10,9 @@
     "prod": "npm install --only=prod && cross-env NODE_ENV=production node index.js &",
     "start-prod": "cross-env NODE_ENV=production node index.js &",
     "stop": "pkill --signal SIGINT nodejs-project",
-    "recovery-db": "node ./work-tools/backup-helper.js && ./db/scripts/restore-database.sh"
+    "recovery-db": "node ./work-tools/backup-helper.js && ./db/scripts/restore-database.sh",
+    "fast-deploy": "npm run stop && git fetch && git pull && npm run prod",
+    "deploy": "npm run stop && git fetch && git pull && ./postman/npm run build-prod && npm run prod"
   },
   "keywords": [],
   "author": "",
