@@ -53,7 +53,7 @@ let webSocketClients = [];
 
 webServer.use(express.urlencoded({ extended: true }));
 webServer.use(express.json({ extended: true }));
-webServer.use(helmet());
+// webServer.use(helmet());
 webServer.use(cors(CORS_OPTIONS));
 webServer.use((req, res, next) => {
   logLineAsync(`[${PORT}] url=${req.originalUrl} called`, logPath);
