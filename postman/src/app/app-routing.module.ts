@@ -28,6 +28,11 @@ const routes: Routes = [
     path: `${RouteEnum.WORK}/:id`,
     component: WorkPageComponent,
     canActivate: [AuthGuard],
+    data: {
+      title: 'Work page',
+      description: 'page for make the requests',
+      keywords: 'Postman app, MiniPostman, requests, work'
+    },
   },
   {
     path: RouteEnum.WORK,

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { SEOService } from './services/seo.service';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +31,7 @@ export class AppComponent {
         return route;
       }),
       filter((route) => route.outlet === 'primary'),
+      //here we can add getting params from routes like id etc., to set if needed some data to page with dynamic page
       mergeMap((route) => route.data)
     )
       .subscribe((event) => {
