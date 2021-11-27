@@ -16,26 +16,63 @@ const routes: Routes = [
     path: '', redirectTo: RouteEnum.WORK, pathMatch: 'full',
   },
   {
-    path: RouteEnum.HOME, component: HomePageComponent,
+    path: RouteEnum.HOME,
+    component: HomePageComponent,
+    data: {
+      title: 'Home page',
+      description: 'miniPostman application',
+      keywords: 'Postman app, MiniPostman, home'
+    },
   },
   {
-    path: `${RouteEnum.WORK}/:id`, component: WorkPageComponent, canActivate: [AuthGuard]
+    path: `${RouteEnum.WORK}/:id`,
+    component: WorkPageComponent,
+    canActivate: [AuthGuard],
   },
   {
-    path: RouteEnum.WORK, component: WorkPageComponent, canActivate: [AuthGuard]
+    path: RouteEnum.WORK,
+    component: WorkPageComponent,
+    canActivate: [AuthGuard],
+    data: {
+      title: 'Work page',
+      description: 'page for make the requests',
+      keywords: 'Postman app, MiniPostman, requests, work'
+    },
   },
   {
-    path: RouteEnum.STORAGE, component: StoragePageComponent, canActivate: [AuthGuard]
+    path: RouteEnum.STORAGE,
+    component: StoragePageComponent,
+    canActivate: [AuthGuard],
+    data: {
+      title: 'Storage page',
+      description: 'page for storage data',
+      keywords: 'Postman app, MiniPostman, work, storage'
+    },
   },
   {
-    path: RouteEnum.OPTIONS, component: OptionsPageComponent, canActivate: [AuthGuard]
+    path: RouteEnum.OPTIONS,
+    component: OptionsPageComponent,
+    canActivate: [AuthGuard],
+    data: {
+      title: 'About page',
+      description: 'information about user',
+      keywords: 'Postman app, MiniPostman, work, about user'
+    },
   },
   {
-    path: RouteEnum.AUTH, redirectTo: `${RouteEnum.AUTH}/${AuthEnum.LOG_IN}`, pathMatch: 'full', canActivate: [NoAuthGuard]
+    path: RouteEnum.AUTH,
+    redirectTo: `${RouteEnum.AUTH}/${AuthEnum.LOG_IN}`,
+    pathMatch: 'full',
+    canActivate: [NoAuthGuard],
   },
   {
     path: RouteEnum.AUTH,
     canActivate: [NoAuthGuard],
+    data: {
+      title: 'Authentication page',
+      description: ' for register, log in and reset password',
+      keywords: 'Postman app, MiniPostman, authentication, login, registration, reset, password'
+    },
     children: [
       {
         path: AuthEnum.SIGN_UP,
@@ -52,7 +89,13 @@ const routes: Routes = [
     ],
   },
   {
-    path: '**', component: NotFoundPageComponent,
+    path: '**',
+    component: NotFoundPageComponent,
+    data: {
+      title: 'Error page',
+      description: 'This is an error page of mini postman app',
+      keywords: 'Postman app, MiniPostman, error'
+    },
   },
 ];
 
