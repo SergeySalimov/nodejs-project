@@ -2,13 +2,22 @@
   <form [formGroup]="uploadForm" (ngSubmit)="onSubmitUpload()" (focusin)="resetUploadProgress()">
     <div class="upload-zone material-block mb-2">
       <div class="material-title">Upload-file</div>
-
       <input
         (change)="prepareFiles($event.target.files)"
         formControlName="files"
         type="file"
         class="form-control-file"
       >
+    </div>
+    <div *ngIf="filesInput.invalid && (filesInput.dirty || filesInput.touched)"
+         class="alert alert-danger">
+
+      <div *ngIf="filesInput.errors?.required">
+        Name is required.
+      </div>
+      <div *ngIf="filesInput.errors?.fileSize">
+        File size must be less than 1 Mb.
+      </div>
     </div>
 
     <div class="comments">

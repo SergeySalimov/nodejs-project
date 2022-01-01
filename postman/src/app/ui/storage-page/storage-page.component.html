@@ -1,7 +1,14 @@
 <div class="row">
   <h2 class="text-center mt-4 mb-5 h1">Хранилище</h2>
 
-  <app-storage-page-upload></app-storage-page-upload>
+  <app-storage-page-upload *ngIf="(uploadListData$ | async)?.length < FILES_LIMIT; else maximumQuantity">
+  </app-storage-page-upload>
+
+  <ng-template #maximumQuantity>
+    <div class="h2 alert alert-success text-center col-sm-12 offset-md-2 col-md-8 offset-lg-3 col-lg-6 mb-5 p-3">
+      Maximum for uploaded files reached
+    </div>
+  </ng-template>
 
   <div class="dropdown-divider"></div>
 

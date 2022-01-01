@@ -8,6 +8,8 @@ export const environment = {
   production: false,
   webSocketUrl: 'ws://localhost:7781',
   URL_AFTER_LOGIN: `/${RouteEnum.STORAGE}`,
+  MAX_FILE_SIZE: 1 * 1024 * 1024 * 1024, // 1Gb
+  FILES_LIMIT: 3,
 };
 
 /*

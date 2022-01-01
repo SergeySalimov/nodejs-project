@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { UploadStatusEnum } from '../../../interfaces/constant';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PostmanService } from '../../../services/postman.service';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { fileSizeValidator } from './file-size.validator';
 
 @Component({
   selector: 'app-storage-page-upload',
@@ -17,7 +18,11 @@ export class StoragePageUploadComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   uploadStatus: UploadStatusEnum;
   uploadForm: FormGroup;
-  files: File[];
+  files: FileList;
+  
+  get filesInput(): FormControl {
+    return this.uploadForm.get('files') as FormControl;
+  }
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -82,8 +87,14 @@ export class StoragePageUploadComponent implements OnInit, OnDestroy {
     // };
   }
 
-  prepareFiles(files: any): void {
-    this.files = files;
+  prepareFiles(files: FileList): void {
+    if (files?.item(0)) {
+      this.filesInput.setValidators([fileSizeValidator(files)]);
+      this.filesInput.updateValueAndValidity();
+      this.files = files;
+    } else {
+      this.filesInput.reset();
+    }
   }
 
   resetUploadProgress(): void {
