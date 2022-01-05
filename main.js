@@ -43,10 +43,10 @@ const uploadDataPath = path.join(__dirname, 'data/upload-data.json');
 const uploadDirPath = path.join(__dirname, 'uploaded');
 let serverUrl;
 // Set configurations for development or production
-if (process.env.NODE_ENV === 'production') {
-  serverUrl = `http://178.172.195.18:${PORT}`;
-} else {
+if (process.env.NODE_ENV === 'development') {
   serverUrl = `http://localhost:${PORT}`;
+} else {
+  serverUrl = `http://18.192.242.179:${PORT}`;
 }
 
 const webSocketServer = new WebSocket.Server({ port: WS_PORT });
