@@ -29,8 +29,8 @@ import { createGzip } from 'zlib';
 import { Readable } from 'stream';
 
 const webServer = express();
-const PORT = 7780;
-const WS_PORT = 7781;
+const PORT = 57780;
+const WS_PORT = 57781;
 const API = '/api';
 const CORS_OPTIONS = {
   origin: '*', // разрешаем запросы с любого origin, вместо * здесь может быть ОДИН origin
