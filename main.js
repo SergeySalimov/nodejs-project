@@ -461,7 +461,7 @@ webServer.post(`${API}/sign-in`, async (req, res) => {
     });
     
   } catch (e) {
-    logLineAsync(`[${PORT}] ERROR on database work on check password for email "${email}".}`, logPath);
+    logLineAsync(`[${PORT}] ERROR on database work on check password for email "${email}".`, logPath);
     return res.status(400).end();
   }
 });
