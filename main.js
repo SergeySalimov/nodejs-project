@@ -41,12 +41,15 @@ const logPath = path.join(__dirname, '_server.log');
 const historyPath = path.join(__dirname, 'data/history.json');
 const uploadDataPath = path.join(__dirname, 'data/upload-data.json');
 const uploadDirPath = path.join(__dirname, 'uploaded');
+let siteMapUrl;
 let serverUrl;
 // Set configurations for development or production
 if (process.env.NODE_ENV === 'development') {
   serverUrl = `http://localhost:${PORT}`;
+  siteMapUrl = `http://localhost:${PORT}`;
 } else {
   serverUrl = `http://18.192.242.179:${PORT}`;
+  siteMapUrl = `ec2-18-192-242-179.eu-central-1.compute.amazonaws.com`;
 }
 
 const webSocketServer = new WebSocket.Server({ port: WS_PORT });
@@ -544,7 +547,7 @@ webServer.get('/sitemap.xml',(req, res) => {
   }
   
   try {
-    const smStream = new SitemapStream({ hostname: serverUrl });
+    const smStream = new SitemapStream({ hostname: siteMapUrl });
     const pipeline = smStream.pipe(createGzip());
     
     // pipe your entries or directly write them.
@@ -560,7 +563,7 @@ webServer.get('/sitemap.xml',(req, res) => {
     // make sure to attach a write stream such as streamToPromise before ending
     smStream.end();
     // stream write the response
-    pipeline.pipe(res).on('error', (e) => {throw e})
+    pipeline.pipe(res).on('error', (e) => { throw e })
   } catch (e) {
     logLineAsync(`[${PORT}] ERROR on creation sitemap.xml`, logPath);
     res.status(500).end()
