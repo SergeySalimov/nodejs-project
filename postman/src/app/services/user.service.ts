@@ -58,7 +58,6 @@ export class UserService {
           this.messageService.createNewToast(data.body.message, true);
           this.$userData.next(data.body.user);
         }
-        console.log(xToken);
       },
       (data: HttpErrorResponse) => this.messageService.createNewToast(data.error.message, false),
     );

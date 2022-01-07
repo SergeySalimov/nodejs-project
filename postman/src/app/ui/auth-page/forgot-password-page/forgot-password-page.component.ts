@@ -14,7 +14,6 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./forgot-password-page.component.scss']
 })
 export class ForgotPasswordPageComponent implements OnInit, OnDestroy {
-  
   public eYesOrNo = EYesOrNo;
   public eLog = AuthEnum;
   public securityRoute = `/${RouteEnum.AUTH}/`;
@@ -28,7 +27,7 @@ export class ForgotPasswordPageComponent implements OnInit, OnDestroy {
   ) {}
   
   ngOnInit(): void {
-    this.subscription = this.route.queryParams.subscribe((params: Params) => this.emailForReset = params?.email);
+    this.subscription.add(this.route.queryParams.subscribe((params: Params) => this.emailForReset = params?.email));
   }
   
   public onSubmit() {

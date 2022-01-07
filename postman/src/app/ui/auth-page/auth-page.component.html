@@ -43,17 +43,18 @@
         <div class="input-group">
           <input
             [(ngModel)]="user.password"
+            [type]="hidePassword ? 'password' : 'text'"
+            [class.is-invalid]="pswd.invalid && pswd.touched"
             #pswd="ngModel"
             name="password"
-            [type]="hidePassword ? 'password' : 'text'"
             class="form-control"
-            [class.is-invalid]="pswd.invalid && pswd.touched"
             minlength="6"
             required
             id="password"
             placeholder="введите пароль">
           <div class="input-group-text bg-transparent">
-            <mat-icon class="eye-psw" (click)="hidePassword = !hidePassword" [color]="hidePassword ? 'primary' : 'warn'">
+            <mat-icon class="eye-psw" (click)="hidePassword = !hidePassword"
+                      [color]="hidePassword ? 'primary' : 'warn'">
               {{hidePassword ? 'visibility' : 'visibility_off'}}
             </mat-icon>
           </div>
@@ -61,12 +62,12 @@
         </div>
       </div>
       <span *ngIf="logStatus === eLog.LOG_IN" class="pl-2">
-                <a [routerLink]="[securityRoute, eLog.FORGOT_PSWD]"
-                   [queryParams]="{ email: user.email }"
-                   [style.color]="'black'"
-                ><strong>Забыли пароль?</strong>
-                </a>
-            </span>
+        <a [routerLink]="[securityRoute, eLog.FORGOT_PSWD]"
+           [queryParams]="{ email: user.email }"
+           [style.color]="'black'"
+           ><strong>Забыли пароль?</strong>
+        </a>
+      </span>
 
       <div class="auth-buttons mx-0 mt-3">
         <button type="submit" mat-raised-button color="primary">Отправить</button>

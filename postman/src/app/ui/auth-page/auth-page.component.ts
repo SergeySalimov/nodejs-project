@@ -20,7 +20,7 @@ export class AuthPageComponent implements OnDestroy {
   private subscription: Subscription;
   
   constructor(public readonly route: ActivatedRoute, public readonly userService: UserService) {
-    this.subscription = this.route.queryParams.subscribe((params: Params) => this.user.email = params?.email);
+    this.subscription.add(this.route.queryParams.subscribe((params: Params) => this.user.email = params?.email));
   }
   
   public onSubmit(): void {
