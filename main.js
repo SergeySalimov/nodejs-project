@@ -42,14 +42,11 @@ const historyPath = path.join(__dirname, 'data/history.json');
 const uploadDataPath = path.join(__dirname, 'data/upload-data.json');
 const uploadDirPath = path.join(__dirname, 'uploaded');
 let siteMapUrl;
-let serverUrl;
 // Set configurations for development or production
 if (process.env.NODE_ENV === 'development') {
-  serverUrl = `http://localhost:${PORT}`;
   siteMapUrl = `http://localhost:${PORT}`;
 } else {
-  serverUrl = `http://18.192.242.179:${PORT}`;
-  siteMapUrl = `ec2-18-192-242-179.eu-central-1.compute.amazonaws.com`;
+  siteMapUrl = `http://ec2-18-192-242-179.eu-central-1.compute.amazonaws.com`;
 }
 
 const webSocketServer = new WebSocket.Server({ port: WS_PORT });
@@ -489,7 +486,7 @@ webServer.post(`${API}/sign-up`, async (req, res) => {
         } else {
           logLineAsync(`[${PORT}] new user "${email}" was saved in database`, logPath);
           
-          let link = `${serverUrl}/confirmation-email?sid=${sid}`;
+          let link = `${siteMapUrl}/confirmation-email?sid=${sid}`;
           
           sendEmail(email, { name, surname, link })
             .then(() => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
@@ -519,11 +516,11 @@ webServer.get('/confirmation-email', async (req, res) => {
     await Users.checkUserConfirmation(sid)
       .then(status => {
         logLineAsync(`[${PORT}] confirmation for sid completed, status: ${status}, sid: ${sid}`, logPath);
-        res.send(createConfirmationPage(serverUrl, status)).end();
+        res.send(createConfirmationPage(siteMapUrl, status)).end();
       });
   } catch (e) {
     logLineAsync(`[${PORT}] ERROR on database work for sid confirmation`, logPath);
-    res.send(createConfirmationPage(serverUrl, 'error')).end();
+    res.send(createConfirmationPage(siteMapUrl, 'error')).end();
   }
 });
 
