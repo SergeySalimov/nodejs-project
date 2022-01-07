@@ -79,7 +79,7 @@ export class PostmanService {
     this.$disableLoadButton.next(true);
 
     const formData: FormData = new FormData();
-    const fileLength: string = file.size.toString();
+    const fileLength: string = file?.size.toString();
 
     formData.append('file', file);
     formData.append('comment', comment);

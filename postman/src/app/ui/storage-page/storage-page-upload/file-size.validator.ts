@@ -7,6 +7,6 @@ export function fileSizeValidator(files: FileList): ValidatorFn {
       return null;
     }
     
-    return files.item(0).size > environment.MAX_FILE_SIZE ? {fileSize: true} : null;
+    return files.item(0)?.size > environment.MAX_FILE_SIZE ? {fileSize: true} : null;
   }
 }
