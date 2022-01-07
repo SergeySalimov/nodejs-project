@@ -102,6 +102,9 @@ const createConfirmationPage = (link, status) => {
 const MESSAGE_SUCCESS_FOR_USER = {
   message: 'На вашу почту было выслано письмо для подтверждения. Пройдите, пожалуйста, на ваш почтовый ящик и перейдите по ссылке указанной в письме для завершения регистрации',
 };
+const MESSAGE_SUCCESS_FOR_USER_TEMP = {
+  message: 'Пользователь зарегистрирован!',
+};
 const MESSAGE_ERROR_SENT_EMAIL_FOR_USER = {
   message: 'К сожалению письмо для пожтверждения не было выслано',
 };
@@ -111,4 +114,5 @@ export {
   createConfirmationPage,
   MESSAGE_SUCCESS_FOR_USER,
   MESSAGE_ERROR_SENT_EMAIL_FOR_USER,
+  MESSAGE_SUCCESS_FOR_USER_TEMP,
 }

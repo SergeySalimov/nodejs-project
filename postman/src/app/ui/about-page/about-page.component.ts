@@ -106,6 +106,11 @@ export class AboutPageComponent {
       content: 'Почтовый сервис', data:
         [
           {
+            name: 'ВАЖНОЕ ЗАМЕЧАНИЕ',
+            link: 'https://forums.aws.amazon.com/thread.jspa?threadID=37650',
+            description: 'Из-за политики безопастности AWS, я не стал писать дополнительные письма для того чтобы полностью сделать доступным 465 порт для SMPTS, а сделал в приложении автоматическое регистрирование пользователей.',
+          },
+          {
             name: 'Почтовый сервис',
             link: 'https://github.com/SergeySalimov/nodejs-project/blob/master/share/send-email.js#L12',
             description: 'Для подтверждения пользователем своего почтового адреса ему производится отправка письма на его электронный ящик',

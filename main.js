@@ -20,6 +20,7 @@ import {
   createConfirmationPage,
   MESSAGE_ERROR_SENT_EMAIL_FOR_USER,
   MESSAGE_SUCCESS_FOR_USER,
+  MESSAGE_SUCCESS_FOR_USER_TEMP,
   sendEmail,
 } from './share/send-email';
 import MESSAGE from "./share/messages";
@@ -485,18 +486,19 @@ webServer.post(`${API}/sign-up`, async (req, res) => {
           return res.status(401).send({ message: result }).end();
         } else {
           logLineAsync(`[${PORT}] new user "${email}" was saved in database`, logPath);
+  
+          // ToDo enable if port 465 is open, disabled due AWS security rules
+          // let link = `${siteMapUrl}/confirmation-email?sid=${sid}`;
           
-          let link = `${siteMapUrl}/confirmation-email?sid=${sid}`;
-          
-          sendEmail(email, { name, surname, link })
-            .then(() => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
-            .catch(err => {
-              logLineAsync(`[${PORT}] ERROR sending email for "${email}", text: ${shortMessage(err)}`, logPath);
-              return res.status(401).send(MESSAGE_ERROR_SENT_EMAIL_FOR_USER).end();
-            });
-          
-          MESSAGE_SUCCESS_FOR_USER.sid = sid;
-          res.status(200).send(MESSAGE_SUCCESS_FOR_USER).end();
+          // sendEmail(email, { name, surname, link })
+          //   .then(() => logLineAsync(`[${PORT}] email for "${email}" was sent`, logPath))
+          //   .catch(err => {
+          //     logLineAsync(`[${PORT}] ERROR sending email for "${email}", text: ${shortMessage(err)}`, logPath);
+          //     return res.status(401).send(MESSAGE_ERROR_SENT_EMAIL_FOR_USER).end();
+          //   });
+          // MESSAGE_SUCCESS_FOR_USER.sid = sid;
+          MESSAGE_SUCCESS_FOR_USER_TEMP.sid = sid;
+          res.status(200).send(MESSAGE_SUCCESS_FOR_USER_TEMP).end();
         }
       });
     

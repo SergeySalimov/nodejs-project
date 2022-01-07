@@ -27,7 +27,7 @@ export default {
           createdAt: new Date(),
           lastEdited: new Date(),
           photoUrl: '',
-          isConfirmed: false,
+          isConfirmed: true, // ToDo turn to false if port 465 is open
           isAdmin: false,
           isDeleted: false,
         });
