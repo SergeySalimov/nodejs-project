@@ -9,7 +9,7 @@ const pipeline = util.promisify(stream.pipeline);
 const readdir = util.promisify(fs.readdir);
 const stat = util.promisify(fs.stat);
 
-const defaultFolderName = 'postman';
+const defaultFolderName = '../../postman/dist/postman';
 const GZ = '.gz';
 
 const logPath = path.join(__dirname, '_server.log');
