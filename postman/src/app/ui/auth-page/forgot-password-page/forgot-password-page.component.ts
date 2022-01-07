@@ -27,7 +27,7 @@ export class ForgotPasswordPageComponent implements OnInit, OnDestroy {
   ) {}
   
   ngOnInit(): void {
-    this.subscription.add(this.route.queryParams.subscribe((params: Params) => this.emailForReset = params?.email));
+    this.subscription = this.route.queryParams.subscribe((params: Params) => this.emailForReset = params?.email);
   }
   
   public onSubmit() {
