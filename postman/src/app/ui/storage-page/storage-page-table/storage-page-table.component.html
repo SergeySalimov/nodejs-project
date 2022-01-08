@@ -9,7 +9,9 @@
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element"> {{element.originalName}} </td>
+        <td mat-cell *matCellDef="let element">
+          {{element.originalName.length < nameSliceRange ? element.originalName : element.originalName.slice(0, nameSliceRange - 3) + '...'}}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="size">

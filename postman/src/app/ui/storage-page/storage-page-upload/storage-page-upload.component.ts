@@ -40,8 +40,9 @@ export class StoragePageUploadComponent implements OnInit, OnDestroy {
   getClassForProgressBar(): string {
     switch (this.uploadStatus) {
       case UploadStatusEnum.READY:
-      case UploadStatusEnum.PROGRESS:
         return 'bg-primary';
+      case UploadStatusEnum.PROGRESS:
+        return 'bg-primary progress-bar-animated';
       case UploadStatusEnum.DONE:
         return 'bg-success';
       case UploadStatusEnum.ERROR:
@@ -52,6 +53,25 @@ export class StoragePageUploadComponent implements OnInit, OnDestroy {
   }
 
   onSubmitUpload(): void {
+    // ToDo need to add here real session token
+    const sessionToken: string = 'TOKEN:' + (Date.now().toString(36) + Math.random().toString(36).substring(2, 15));
+  
+    this.uploadStatus = UploadStatusEnum.PROGRESS;
+    const { comments } = this.uploadForm.getRawValue();
+    this.uploadForm.disable();
+    
+    this.postmanService.uploadFiles(this.files[0], comments, sessionToken).pipe(
+      finalize(() => {
+        setTimeout(() => this.uploadStatus = UploadStatusEnum.DONE, 500);
+        this.uploadForm.reset({ files: null, comments: ''});
+        this.postmanService.getUploadFileList();
+        this.uploadForm.enable();
+      }),
+      takeUntil(this.destroy$),
+    ).subscribe();
+  }
+  
+  onSubmitUploadOld(): void {
     // ToDo need to add here real session token
     const sessionToken: string = 'TOKEN:' + (Date.now().toString(36) + Math.random().toString(36).substring(2, 15));
 

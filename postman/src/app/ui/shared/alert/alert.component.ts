@@ -44,7 +44,6 @@ export class AlertComponent implements OnInit, OnDestroy {
   }
   
   public openInfoWindow(): void {
-    console.log('open');
     this.isAlertInfoShown = true;
     this.timerInfoValue = 100;
     this.intervalInfoId = setInterval(() => {

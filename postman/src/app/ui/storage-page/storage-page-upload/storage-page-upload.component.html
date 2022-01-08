@@ -28,13 +28,18 @@
     </div>
 
     <div class="progress mb-2">
-      <ng-container *ngIf="progress$ | async as uploadProgress">
-        <div
-          [style.width]="uploadProgress + '%'"
-          class="progress-bar {{getClassForProgressBar()}}"
-          role="progressbar"
-        >{{uploadProgress}} %</div>
-      </ng-container>
+      <div
+        [style.width]="'100%'"
+        class="progress-bar {{getClassForProgressBar()}} progress-bar-striped"
+        role="progressbar"
+      ></div>
+<!--      <ng-container *ngIf="progress$ | async as uploadProgress">-->
+<!--        <div-->
+<!--          [style.width]="uploadProgress + '%'"-->
+<!--          class="progress-bar {{getClassForProgressBar()}}"-->
+<!--          role="progressbar"-->
+<!--        >{{uploadProgress}} %</div>-->
+<!--      </ng-container>-->
     </div>
 
     <button
